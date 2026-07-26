@@ -1,0 +1,171 @@
+aid: trestle
+url: https://raw.githubusercontent.com/api-evangelist/trestle/refs/heads/main/apis.yml
+name: Trestle
+kind: company
+description: >-
+  Trestle is the real estate data distribution platform operated by CoreLogic (rebranded
+  Cotality in 2025), sitting between roughly 500 US Multiple Listing Services and the
+  technology providers, brokers and aggregators that consume their listing data. Its
+  home market is the United States. Trestle occupies the licensing-and-transport layer
+  of the residential real estate value chain: it maps each participating MLS into the
+  RESO Data Dictionary and republishes it through a RESO Web API 2.0 / OData 4.0
+  endpoint and a legacy RETS 1.8 endpoint, plus a bidirectional Direct Web API into the
+  Matrix MLS CRM and a Participant Reporting API used to prove broker relationships back
+  to the MLSs. Its API posture is unusually honest for this sector: the documentation
+  portal at trestle-documentation.corelogic.com is fully public and needs no login, the
+  OAuth2 client-credentials flow and every OData query convention are published openly,
+  and the OData service document at api.cotality.com/trestle/odata answers anonymously
+  with a 200. But nothing behind it is reachable. The $metadata document and every
+  entity set return 401 Bearer, and credentials are only issued after a developer
+  registers a Technology Provider or Broker account, requests a connection to a specific
+  multiple listing organization, and completes an e-signed data licence contract that all
+  parties sign — a contract most MLSs will only ratify if a licensed broker or agent
+  sponsors it or the technology provider files periodic participant reports. Trestle is
+  RESO-certified and publicly documented, and still effectively uncallable without a
+  signed licence. Certification is not reachability.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/groq.png
+tags:
+- Real Estate
+- United States
+- MLS
+- RESO
+- Property Listings
+- IDX
+- PropTech
+- Data Distribution
+- OData
+- RETS
+- Listing Syndication
+created: '2026-07-26'
+modified: '2026-07-26'
+specificationVersion: '0.19'
+apis:
+- aid: trestle:trestle-reso-web-api
+  name: Trestle RESO Web API
+  description: >-
+    The primary Trestle interface — a RESO Web API 2.0 / OData 4.0 endpoint that
+    republishes MLS data mapped to the RESO Data Dictionary. The anonymously readable
+    OData service document advertises 18 entity sets: Property, Office, Member, Media,
+    OpenHouse, CustomProperty, PropertyRooms, PropertyUnitTypes, Teams, TeamMembers,
+    Field, Lookup, Model, PropertyGreenVerification, Building, HistoryTransactional,
+    DataSystem and Enumeration. Authentication is OAuth2 client_credentials against
+    /trestle/oidc/connect/token with scope=api, returning an 8-hour Bearer token.
+    Documented quotas are 7,200 queries/hour and 180 queries/minute for the Web API and
+    18,000/hour and 480/minute for media URLs; live 401 responses carry
+    Minute-Quota-Limit and Hour-Quota-Limit headers. The service document is public; the
+    $metadata document and every entity set require a Bearer token issued only after an
+    MLS data licence is signed.
+  humanURL: https://trestle-documentation.corelogic.com/webapi.html
+  baseURL: https://api.cotality.com/trestle/odata
+  tags:
+  - RESO
+  - OData
+  - Property Listings
+  - MLS
+  - Real Estate
+  properties:
+  - type: Documentation
+    url: https://trestle-documentation.corelogic.com/webapi.html
+  - type: APIReference
+    url: https://trestle-documentation.corelogic.com/webapi-reference.html
+  - type: ODataServiceDocument
+    url: openapi/trestle-odata-service-document.json
+  - type: Documentation
+    url: https://trestle-documentation.corelogic.com/reso-common-format.html
+  - type: Documentation
+    url: https://trestle-documentation.corelogic.com/webapi-at-scale.html
+  - type: Documentation
+    url: https://trestle-documentation.corelogic.com/webapi-libraries.html
+  - type: DataModel
+    url: https://api.cotality.com/trestle/Documentation/MetaData/Resource/Property
+  - type: Enumerations
+    url: https://api.cotality.com/trestle/Documentation/MetaData/Enums
+- aid: trestle:trestle-direct-web-api
+  name: Trestle Direct Web API
+  description: >-
+    A bidirectional OData interface into the Matrix MLS database, separate from the RESO
+    feed. The CRM reference documents Contacts, EmailHistory, Lists, PortalContents,
+    SavedSearches, UserRegistry and an aggregated DashboardAPI with read and write
+    operations; a companion MLO reference covers multiple-listing-organization
+    integration. Authentication is OpenID Connect, with Clareity Single Sign-On
+    authorization and HTTP Basic named as alternatives, and access is further constrained
+    by the acting user's privileges in Matrix. No explicit base URL is published in the
+    reference, so none is asserted here.
+  humanURL: https://trestle-documentation.corelogic.com/direct-webapi-crm-reference.html
+  tags:
+  - Matrix MLS
+  - CRM
+  - OData
+  - Real Estate
+  properties:
+  - type: APIReference
+    url: https://trestle-documentation.corelogic.com/direct-webapi-crm-reference.html
+  - type: APIReference
+    url: https://trestle-documentation.corelogic.com/direct-webapi-mlo-reference.html
+- aid: trestle:trestle-participant-reporting-api
+  name: Trestle Participant Reporting API
+  description: >-
+    A compliance API that lets technology providers report to each MLS which brokers they
+    hold contracts with — the mechanism by which the licence relationship behind a data
+    feed is evidenced. Documented operations are POST and GET on
+    /trestle/report/TpParticipantReport, authenticated with the same OAuth2
+    client_credentials flow as the Web API (scope=api for Web API feeds, scope=rets for
+    RETS feeds). Not every MLS uses it; some require individual contracts hosted in
+    Trestle instead.
+  humanURL: https://trestle-documentation.corelogic.com/participant-reporting-api.html
+  baseURL: https://api.cotality.com/trestle/report
+  tags:
+  - Compliance
+  - Reporting
+  - MLS
+  - Real Estate
+  properties:
+  - type: APIReference
+    url: https://trestle-documentation.corelogic.com/participant-reporting-api.html
+- aid: trestle:trestle-rets
+  name: Trestle RETS
+  description: >-
+    Trestle's legacy Real Estate Transaction Standard interface, documented as compliant
+    with RETS 1.8. RESO no longer updates the RETS specification, but Trestle continues to
+    serve it for customers who cannot move to the Web API. Login is POST
+    /trestle/rets/login; the service is session-less and supports either HTTP Basic with a
+    Base64-encoded client_id:client_secret or an OAuth2 bearer token obtained with
+    scope=rets. Digest authentication is explicitly not supported.
+  humanURL: https://trestle-documentation.corelogic.com/rets.html
+  baseURL: https://api.cotality.com/trestle/rets
+  tags:
+  - RETS
+  - Legacy
+  - MLS
+  - Real Estate
+  properties:
+  - type: Documentation
+    url: https://trestle-documentation.corelogic.com/rets.html
+  - type: Documentation
+    url: https://trestle-documentation.corelogic.com/rets-libraries.html
+  - type: Documentation
+    url: https://trestle-documentation.corelogic.com/rets-connector.html
+common:
+- type: Website
+  url: https://www.cotality.com/products/trestle
+- type: Documentation
+  url: https://trestle-documentation.corelogic.com/
+- type: FAQ
+  url: https://trestle-documentation.corelogic.com/faq.html
+- type: SignUp
+  url: https://trestle.corelogic.com/SubscriptionWizard
+- type: Login
+  url: https://trestle.corelogic.com/Login
+- type: Support
+  url: https://www.cotality.com/support
+- type: Email
+  url: mailto:trestlesupport@cotality.com
+- type: Certification
+  url: https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification
+  name: CoreLogic achieves RESO Data Dictionary v2.0 vendor certification (2024-10-11)
+- type: Certification
+  url: https://www.reso.org/blog/corelogic-trestle-achieves-reso-platinum-certification-2/
+  name: CoreLogic Trestle achieves RESO Platinum certification
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

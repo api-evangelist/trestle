@@ -1,0 +1,330 @@
+aid: trestle
+name: Trestle
+review:
+  question: >-
+    Is Trestle a RESO-certified MLS data distributor whose API a developer can actually
+    call, and what must they sign or join to get in?
+  answer: >-
+    Certified and publicly documented, but not reachable. The documentation is open, the
+    OData service document answers anonymously, and everything of value behind it returns
+    401 until a per-MLS data licence contract is e-signed by all parties.
+  date: '2026-07-26'
+  reviewer: API Evangelist
+  homeMarket: United States
+  tier: mls-data-infrastructure
+
+sectorPosture:
+  homeMarket: United States
+
+  resoPosture:
+    summary: >-
+      RESO-certified across the board — Web API Platinum, Data Dictionary v2.0 vendor
+      certification, and first multiple-listing data distributor certified on UPI v2.0 —
+      with a live RESO Web API 2.0 / OData 4.0 endpoint whose service document is
+      anonymously readable but whose $metadata and every entity set return 401.
+    certified: true
+    certifications:
+      - type: RESO Web API
+        level: Platinum
+        evidence: >-
+          "RESO has awarded Platinum-level certification to Trestle for its Web API
+          listing transmission service" — RESO blog and Council of Multiple Listing
+          Services announcement.
+        sources:
+          - https://www.reso.org/blog/corelogic-trestle-achieves-reso-platinum-certification-2/
+          - https://members.councilofmls.org/news/news.asp?id=419745
+      - type: RESO Data Dictionary
+        version: '2.0'
+        date: '2024-10-11'
+        evidence: >-
+          CoreLogic "has officially received RESO (Real Estate Standards Organization)
+          vendor certification for the latest version 2.0 of the RESO Data Dictionary."
+        sources:
+          - https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification
+      - type: RESO Universal Property Identifier (UPI)
+        version: '2.0'
+        evidence: >-
+          CoreLogic described as "the first multiple listing data distributor certified on
+          UPI version 2.0". The same article describes CLIP, CoreLogic's own proprietary
+          property identifier, as a separate non-RESO identifier.
+        sources:
+          - https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification
+    resoDirectoryListing: >-
+      No direct fetch of a machine-readable RESO certification directory entry was made
+      during this bootstrap. Certification is evidenced from RESO's own blog, the Council
+      of MLS announcement, and Cotality's certification article, all cited above. The
+      RESO certification directory itself should be probed during enrichment.
+    odataSurface:
+      serviceDocument: https://api.cotality.com/trestle/odata
+      serviceDocumentStatus: 200
+      serviceDocumentAuth: none required
+      metadataDocument: https://api.cotality.com/trestle/odata/$metadata
+      metadataDocumentStatus: 401
+      metadataDocumentNote: >-
+        Responds `www-authenticate: Bearer`. The $metadata document — the actual
+        machine-readable RESO/OData contract — could NOT be harvested. Only the service
+        root, which lists entity set names, is public.
+      entitySets:
+        - Property
+        - Office
+        - Member
+        - Media
+        - OpenHouse
+        - CustomProperty
+        - PropertyRooms
+        - PropertyUnitTypes
+        - Teams
+        - TeamMembers
+        - Field
+        - Lookup
+        - Model
+        - PropertyGreenVerification
+        - Building
+        - HistoryTransactional
+        - DataSystem
+        - Enumeration
+    retsSurface:
+      version: RETS 1.8
+      login: https://api.cotality.com/trestle/rets/login
+      status: 401
+      note: >-
+        "Although the RETS specification is no longer being updated by RESO, Trestle
+        continues to provide data access via RETS for customers who do not wish to or
+        cannot switch to WebAPI." Session-less; digest auth explicitly unsupported.
+
+  accessGate:
+    classification: licence-agreement
+    whatADeveloperMustSignOrJoin: >-
+      Register a Trestle account at https://trestle.corelogic.com as a Technology Provider
+      or a Broker, then request a connection to each individual multiple listing
+      organization (MLO). Trestle "walks them through setting up an e-signing contract to
+      collect signatures from all parties and authorize the billing of the MLO's license
+      fee." The FAQ adds that MLOs typically require either a real estate broker or agent
+      to ratify the contract, or the technology provider to submit periodic participant
+      reports showing which members use the service, and warns: "It is very unlikely that
+      an MLO will license data to a company that does not intend to use it to provide a
+      value-added service back to its members." Credentials are tied to a specific
+      product/feed type. Access is therefore per-MLS, contractual, fee-bearing, and in
+      practice broker-sponsored.
+    coverage: >-
+      Coverage is per-MLS and not published as a list on the public documentation site.
+      Trestle aggregates many US multiple listing organizations; the specific MLSs a given
+      subscriber can reach depend entirely on which licence contracts that subscriber has
+      executed. WARDEX is publicly named as the first MLS on Trestle to reach RESO Data
+      Dictionary v2.0. No public coverage roster was found during this bootstrap.
+    documentationPublic: true
+    documentationNote: >-
+      Unusual for this tier: the full developer documentation at
+      https://trestle-documentation.corelogic.com/ is served anonymously with a 200 — no
+      login wall. Auth flow, OData conventions, quotas, resource metadata and enumerations
+      are all public.
+    sandbox: >-
+      None found. The webapi.html page references an Austin Board of Realtors sample feed,
+      but the FAQ documents no sandbox, demo feed, or trial credentials, and no sandbox
+      host was reachable. Treat as: no sandbox confirmed.
+    interface: >-
+      RESO Web API (OData 4.0) is the primary interface, not a proprietary one. RETS 1.8
+      is offered as a legacy alternative. The Direct Web API into Matrix CRM is
+      proprietary but still OData-shaped.
+
+  openData:
+    exists: false
+    note: >-
+      No open, unlicensed, publicly callable dataset. Every listing record is licensed MLS
+      data. The only anonymously reachable artifacts are the OData service root, the HTML
+      resource-metadata and enumeration pages, and the documentation site itself.
+
+  authModel:
+    primary: OAuth2 client_credentials
+    tokenEndpoint: https://api.cotality.com/trestle/oidc/connect/token
+    scopes:
+      - api
+      - rets
+    tokenType: Bearer
+    tokenLifetimeSeconds: 28800
+    directWebApi: >-
+      OpenID Connect, with Clareity Single Sign-On authorization and HTTP Basic named as
+      alternatives; further constrained by the acting user's privileges in Matrix.
+    rets: >-
+      HTTP Basic with Base64-encoded client_id:client_secret, or OAuth2 bearer token with
+      scope=rets (scope=api returns 400). Digest authentication explicitly unsupported.
+    openidConfiguration: >-
+      No anonymously served discovery document. /trestle/.well-known/openid-configuration
+      and the host-root /.well-known/openid-configuration both returned 404.
+    rateLimits:
+      documented:
+        webapi: 7,200 queries/hour; 180 queries/minute
+        mediaUrls: 18,000 requests/hour; 480 requests/minute
+      observedHeaders: >-
+        A live unauthenticated request to $metadata returned quotatype: Api,
+        minute-quota-limit: 200, hour-quota-limit: 6000 — quota headers are emitted even
+        on 401.
+
+  webhooksEventsSdksPostman:
+    webhooks: >-
+      None documented. Change capture is pull-based: the documented pattern is OData
+      replication ($replication=true) plus $filter on modification timestamps, described
+      on webapi-at-scale.html.
+    events: None documented.
+    sdks: >-
+      A webapi-libraries.html and a rets-libraries.html page exist listing third-party
+      client libraries; no first-party Trestle SDK was identified during this bootstrap.
+    postman: >-
+      The Web API reference page mentions Postman in passing; no published Trestle Postman
+      collection URL was found.
+    changelog: >-
+      Release notes and content-patch documents are published as PDFs from the
+      documentation index, plus a Google Sheets "Field & Lookup Change Document".
+    support: >-
+      trestlesupport@cotality.com and a customer Slack workspace at https://clgx-res.slack.com
+      (invite-only).
+
+harvest:
+  fetchDate: '2026-07-26'
+  artifactsSaved:
+    - path: openapi/trestle-odata-service-document.json
+      type: OData service document (JSON)
+      sourceURL: https://api.cotality.com/trestle/odata
+      httpStatus: 200
+      auth: none
+      parsed: true
+      note: >-
+        Saved verbatim. This is the OData service root, NOT the $metadata CSDL document —
+        it enumerates the 18 entity sets but carries no field-level schema. The
+        $metadata document is the real machine-readable contract and is behind a Bearer
+        token.
+  openapiFound: false
+  openapiNote: >-
+    No OpenAPI or Swagger document is published anywhere on the Trestle or Cotality
+    surface. Every candidate path was probed and 404'd.
+
+probes:
+  - url: https://trestle.corelogic.com/
+    status: 200
+    note: 302-redirects to https://www.cotality.com/products/trestle (CoreLogic rebranded to Cotality in 2025).
+  - url: https://www.cotality.com/products/trestle
+    status: 200
+    note: Product page; four modules — Trestle RESO, Trestle Direct, Trestle Defender, Trestle Share.
+  - url: https://trestle-documentation.corelogic.com/
+    status: 200
+    note: Public developer documentation portal, no login required.
+  - url: https://api.cotality.com/trestle/odata
+    status: 200
+    note: OData service document, anonymously readable. HARVESTED.
+  - url: https://api.cotality.com/trestle/odata/$metadata
+    status: 401
+    note: 'www-authenticate: Bearer. Machine-readable contract NOT harvestable.'
+  - url: https://api.cotality.com/trestle/odata/Property
+    status: 401
+    note: Entity sets require a Bearer token.
+  - url: https://api-prod.corelogic.com/trestle/odata
+    status: 200
+    note: Legacy host, still serving; documentation says it is being deprecated in favour of api.cotality.com.
+  - url: https://api-trestle.corelogic.com/trestle/odata
+    status: 200
+    note: Second legacy host, still serving.
+  - url: https://api.cotality.com/trestle/oidc/connect/token
+    status: 400
+    note: Token endpoint exists; 400 on an empty unauthenticated GET, as expected.
+  - url: https://api.cotality.com/trestle/rets/login
+    status: 401
+    note: RETS 1.8 login endpoint exists and requires credentials.
+  - url: https://api.cotality.com/trestle/report/TpParticipantReport
+    status: 500
+    note: Participant Reporting endpoint exists; errors on an unauthenticated bare GET.
+  - url: https://api.cotality.com/trestle/Documentation/MetaData/Resource/Property
+    status: 200
+    note: Public HTML field-level metadata for the Property resource (and every other resource).
+  - url: https://api.cotality.com/trestle/Documentation/MetaData/Enums
+    status: 200
+    note: Public HTML enumeration reference.
+  - url: https://trestle.corelogic.com/SubscriptionWizard
+    status: 200
+    note: Public signup wizard — the entry point, but issues no keys without a signed MLS licence.
+  - url: https://trestle.corelogic.com/Login
+    status: 200
+    note: Subscriber login.
+  - url: https://developer.trestle.corelogic.com/
+    status: 000
+    note: Does not resolve.
+  - url: https://api.trestle.corelogic.com/
+    status: 000
+    note: Does not resolve.
+  - url: https://docs.trestle.corelogic.com/
+    status: 000
+    note: Does not resolve.
+  - url: https://trestle.corelogic.com/developers
+    status: 404
+  - url: https://trestle.corelogic.com/api
+    status: 404
+  - url: https://trestle.corelogic.com/docs
+    status: 404
+  - url: https://trestle.corelogic.com/openapi.json
+    status: 404
+  - url: https://trestle.corelogic.com/swagger.json
+    status: 404
+  - url: https://trestle.corelogic.com/api-docs
+    status: 404
+  - url: https://trestle-documentation.corelogic.com/openapi.json
+    status: 404
+  - url: https://trestle-documentation.corelogic.com/swagger.json
+    status: 404
+  - url: https://trestle-documentation.corelogic.com/llms.txt
+    status: 404
+  - url: https://api.cotality.com/trestle/swagger.json
+    status: 404
+  - url: https://api.cotality.com/trestle/swagger/v1/swagger.json
+    status: 404
+  - url: https://api.cotality.com/trestle/openapi.json
+    status: 404
+  - url: https://api.cotality.com/trestle/.well-known/openid-configuration
+    status: 404
+  - url: https://api.cotality.com/.well-known/openid-configuration
+    status: 404
+  - url: https://trestle.corelogic.com/robots.txt
+    status: 404
+
+sources:
+  - url: https://www.cotality.com/products/trestle
+    type: Website
+    note: Product overview; four modules and target audience.
+  - url: https://trestle-documentation.corelogic.com/
+    type: Documentation
+    note: Public documentation index; host migration notice to api.cotality.com.
+  - url: https://trestle-documentation.corelogic.com/webapi.html
+    type: Documentation
+    note: OAuth2 client_credentials flow, scope=api, base URL, quotas, replication.
+  - url: https://trestle-documentation.corelogic.com/webapi-reference.html
+    type: APIReference
+    note: OData query conventions and links to resource metadata and enumerations.
+  - url: https://trestle-documentation.corelogic.com/faq.html
+    type: Documentation
+    note: The access gate, verbatim — account types, e-signing contract, broker ratification, participant reporting.
+  - url: https://trestle-documentation.corelogic.com/direct-webapi-crm-reference.html
+    type: APIReference
+    note: Direct Web API CRM resources and OIDC/Clareity/Basic auth.
+  - url: https://trestle-documentation.corelogic.com/participant-reporting-api.html
+    type: APIReference
+    note: TpParticipantReport endpoints and shared OAuth2 auth.
+  - url: https://trestle-documentation.corelogic.com/rets.html
+    type: Documentation
+    note: RETS 1.8 compliance, login endpoint, auth options.
+  - url: https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification
+    type: Certification
+    note: RESO Data Dictionary v2.0 vendor certification, 2024-10-11; UPI v2.0 first.
+  - url: https://www.reso.org/blog/corelogic-trestle-achieves-reso-platinum-certification-2/
+    type: Certification
+    note: RESO Platinum certification for the Trestle Web API.
+
+notes:
+  duplicateRisk: >-
+    An existing api-evangelist repo at all/corelogic already profiles CoreLogic/Cotality
+    and carries 22 AE-DERIVED OpenAPI documents generated from these same Trestle
+    documentation pages. This trestle repo is the product-level, tier-scoped profile and
+    deliberately harvests only what was fetched verbatim. Dedupe or explicitly split
+    company (corelogic) from product (trestle) before publishing both.
+  provenance: >-
+    Nothing in this repo is provider-published as an OpenAPI. The single saved artifact is
+    a verbatim OData service document fetched anonymously. No specs were copied from
+    all/corelogic, because those are AE-derived and would misrepresent Trestle as
+    publishing machine-readable contracts it does not publish.
