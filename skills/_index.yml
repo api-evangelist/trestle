@@ -1,0 +1,37 @@
+generated: '2026-07-26'
+method: generated
+source: >-
+  Packaged Agent Skills generated from Trestle's published documentation
+  (webapi.html, webapi-reference.html, webapi-at-scale.html,
+  participant-reporting-api.html), the public resource metadata browser, and
+  Trestle's own Postman collection (postman/trestle-webapi.postman_collection.json).
+grounding_note: >-
+  Trestle publishes no OpenAPI and its OData $metadata document is auth-gated,
+  so there are no operationIds to cite. Every step in these skills is grounded
+  in an HTTP method + path that appears verbatim in Trestle's own documentation
+  or published Postman collection; entity sets are constrained to the 18 named
+  in openapi/trestle-odata-service-document.json and the navigation properties
+  in data-model/trestle-data-model.yml. Nothing is invented.
+skills:
+  - file: trestle-replicate-listings-and-media.md
+    name: Replicate Trestle listings and media
+    api: Trestle RESO Web API
+    operations:
+      - POST /trestle/oidc/connect/token
+      - GET /trestle/odata/$metadata
+      - GET /trestle/odata/Property
+      - GET /trestle/odata/Media
+  - file: trestle-submit-participant-report.md
+    name: Submit a Trestle participant report
+    api: Trestle Participant Reporting API
+    operations:
+      - POST /trestle/oidc/connect/token
+      - GET /trestle/odata/Member
+      - POST /trestle/report/TpParticipantReport
+      - GET /trestle/report/TpParticipantReport
+      - POST /trestle/report/$metadata
+precondition: >-
+  Both skills require credentials that Trestle issues only after a per-MLS data
+  licence contract is e-signed by all parties. There is no sandbox, no trial key
+  and no public sample credential — an agent without a licence cannot execute
+  either skill past the token request.

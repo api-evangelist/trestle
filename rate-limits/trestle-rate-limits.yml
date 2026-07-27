@@ -1,0 +1,87 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+provider: Trestle
+providerId: trestle
+generated: '2026-07-26'
+method: searched
+created: '2026-07-26'
+modified: '2026-07-26'
+tags:
+  - Rate Limiting
+  - Real Estate
+  - MLS
+description: >-
+  Trestle publishes concrete baseline quotas and returns live quota headers on
+  every response — including on anonymous 401s. Quotas are calculated per
+  product / feed-type pair, not per account: one technology provider with an
+  IDX - WebAPI connection to one MLS and an IDX Plus - WebAPI connection to
+  another gets a separate quota for each connection, and a connection's quota
+  grows as more MLSs are added to it. Media (public MediaURL) requests are
+  metered against a separate, larger quota than API queries.
+sources:
+  - https://trestle-documentation.corelogic.com/webapi.html
+  - https://trestle-documentation.corelogic.com/webapi-at-scale.html
+headers:
+  minuteQuotaLimit: Minute-Quota-Limit
+  hourQuotaLimit: Hour-Quota-Limit
+  hourQuotaResetTime: Hour-Quota-ResetTime
+  quotaType: QuotaType
+headerNotes: >-
+  Hour-Quota-ResetTime is a Unix timestamp in milliseconds. QuotaType is
+  observed as OAuth (documented sample) and Api (live 401 response). Values are
+  returned as floats in the documented sample (e.g. 4920.0 / 147600.0).
+responseCodes:
+  throttled: 429
+limits:
+  - name: Web API queries (baseline)
+    scope: product/feed-type connection
+    metric: requests_per_hour
+    limit: 7200
+    timeFrame: hour
+  - name: Web API queries (burst)
+    scope: product/feed-type connection
+    metric: requests_per_minute
+    limit: 180
+    timeFrame: minute
+  - name: Public media URL requests (baseline)
+    scope: product/feed-type connection
+    metric: requests_per_hour
+    limit: 18000
+    timeFrame: hour
+  - name: Public media URL requests (burst)
+    scope: product/feed-type connection
+    metric: requests_per_minute
+    limit: 480
+    timeFrame: minute
+observed:
+  - request: 'GET https://api.cotality.com/trestle/odata/$metadata (unauthenticated)'
+    status: 401
+    quotatype: Api
+    minute_quota_limit: 200
+    hour_quota_limit: 6000
+    note: Quota headers are emitted even on an unauthenticated 401.
+payloadLimits:
+  - name: Maximum records per query
+    limit: 1000
+    parameter: $top
+  - name: Maximum records per key-only / InKeyIndex query
+    limit: 300000
+    parameter: $top with $select on InKeyIndex fields
+    note: >-
+      Selecting only key fields (per-resource InKeyIndex list) allows batches up
+      to 300,000; a $top above that returns an error (Trestle 5.4).
+  - name: Replication endpoint
+    limit: 1000000
+    parameter: Replication=true
+    note: >-
+      Documented as able to exceed 1,000,000 records returned; recommended for
+      initial loads and reconciliation.
+guidance:
+  - Use ModificationTimestamp (property) and PhotosChangeTimestamp (media) for incremental pulls.
+  - Maximize $top and $expand (e.g. $expand=Rooms,Units,OpenHouse,CustomProperty,Media) to cut query count.
+  - Throttle with leaky-bucket or token-bucket pacing against the returned limits.
+  - Retry 429s with exponential backoff (1, 2, 4, 8, 16, 32 seconds), not a fixed sleep.
+upgrades:
+  premium_quotas: >-
+    "Premium Quotas" are referenced in the Data Dictionary 2.0 release notice as
+    a permanent quota boost available on request; no public price is published.

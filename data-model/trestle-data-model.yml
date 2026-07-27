@@ -1,0 +1,130 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  Trestle's own anonymously readable resource metadata browser —
+  https://api.cotality.com/trestle/Documentation/MetaData/Resource/<Resource>
+  for all 15 RESO resources — cross-checked against the OData service document
+  at openapi/trestle-odata-service-document.json. Field counts, primary keys,
+  InKeyIndex batching fields and every navigation property (Expands) below were
+  read from those pages, not inferred.
+docs: https://trestle-documentation.corelogic.com/metadata-reso.html
+description: >-
+  The RESO Data Dictionary 2.0 entity graph as Trestle republishes it. This is
+  the closest thing to a machine-readable contract that Trestle exposes
+  anonymously: the OData $metadata CSDL is behind a Bearer token, but the same
+  information — resources, primary keys, field counts, and the navigation
+  properties you can $expand — is published as HTML on the metadata browser.
+  Property is the hub; everything else hangs off it.
+notation: >-
+  relationships use has_one / has_many / belongs_to with the OData navigation
+  property name in `via`; direction is from the entity that exposes the expand.
+
+surfaces:
+  odata: https://api.cotality.com/trestle/odata
+  rets: https://api.cotality.com/trestle/rets/search?SearchType=<Resource>&Class=<Resource>
+  metadata_browser: https://api.cotality.com/trestle/Documentation/MetaData/Resource/
+  enumerations: https://api.cotality.com/trestle/Documentation/MetaData/Enums
+  csdl_metadata: https://api.cotality.com/trestle/odata/$metadata
+  csdl_metadata_status: 401
+
+entities:
+  - {name: Property, key: ListingKey, fields: 761, domain: listings, description: The listing record — the hub of the Trestle graph.}
+  - {name: Media, key: MediaKey, fields: 58, domain: listings, description: Photos and other media; MediaURL is a public URL metered on a separate quota.}
+  - {name: Member, key: MemberKey, fields: 94, domain: roster, description: An MLS member (agent).}
+  - {name: Office, key: OfficeKey, fields: 82, domain: roster, description: A brokerage office.}
+  - {name: Teams, key: TeamKey, fields: 50, domain: roster, description: An agent team.}
+  - {name: TeamMembers, key: TeamMemberKey, fields: 31, domain: roster, description: Membership of a Member in a Team.}
+  - {name: OpenHouse, key: OpenHouseKey, fields: 49, domain: listings, description: A scheduled open house for a listing.}
+  - {name: PropertyRooms, key: RoomKey, fields: 41, domain: listings, description: Per-room detail for a listing.}
+  - {name: PropertyUnitTypes, key: UnitTypeKey, fields: 54, domain: listings, description: Per-unit-type detail for multi-unit listings.}
+  - {name: CustomProperty, key: ListingKey, fields: 144, domain: listings, description: MLS-specific non-standard fields for a listing; shares Property's key.}
+  - {name: Building, key: BuildingKey, fields: 328, domain: property-records, description: Building/complex record; carries UniversalPropertyId (RESO UPI).}
+  - {name: HistoryTransactional, key: HistoryTransactionalKey, fields: 31, domain: history, description: Field-level change history for listing and roster records.}
+  - {name: Field, key: FieldKey, fields: 15, domain: metadata, description: Metadata resource describing available fields, filterable per MLS.}
+  - {name: Lookup, key: LookupKey, fields: 15, domain: metadata, description: Metadata resource describing available lookup (enumeration) values.}
+  - {name: Model, key: ModelKey, fields: 8, domain: metadata, description: Metadata resource describing the data model a Field/Lookup belongs to.}
+
+service_document_only:
+  - DataSystem
+  - Enumeration
+service_document_only_note: >-
+  Advertised as entity sets in the OData service document but with no page in
+  the public metadata browser, so no key or field list can be recorded.
+
+relationships:
+  - {from: Property, to: Building, kind: has_one, via: Building}
+  - {from: Property, to: Member, kind: has_one, via: ListAgent}
+  - {from: Property, to: Member, kind: has_one, via: CoListAgent}
+  - {from: Property, to: Member, kind: has_one, via: BuyerAgent}
+  - {from: Property, to: Member, kind: has_one, via: CoBuyerAgent}
+  - {from: Property, to: Office, kind: has_one, via: ListOffice}
+  - {from: Property, to: Office, kind: has_one, via: CoListOffice}
+  - {from: Property, to: Office, kind: has_one, via: BuyerOffice}
+  - {from: Property, to: Office, kind: has_one, via: CoBuyerOffice}
+  - {from: Property, to: CustomProperty, kind: has_one, via: CustomProperty}
+  - {from: Property, to: Media, kind: has_many, via: Media}
+  - {from: Property, to: OpenHouse, kind: has_many, via: OpenHouse}
+  - {from: Property, to: PropertyRooms, kind: has_many, via: Rooms}
+  - {from: Property, to: PropertyUnitTypes, kind: has_many, via: UnitTypes}
+  - {from: Media, to: Property, kind: belongs_to, via: Property}
+  - {from: OpenHouse, to: Property, kind: belongs_to, via: Property}
+  - {from: PropertyRooms, to: Property, kind: belongs_to, via: Property}
+  - {from: PropertyUnitTypes, to: Property, kind: belongs_to, via: Property}
+  - {from: CustomProperty, to: Property, kind: belongs_to, via: Property}
+  - {from: Building, to: Property, kind: has_many, via: Property}
+  - {from: Building, to: Media, kind: has_many, via: Media}
+  - {from: Member, to: Property, kind: has_many, via: ListAgentProperties}
+  - {from: Member, to: Property, kind: has_many, via: CoListAgentProperties}
+  - {from: Member, to: Property, kind: has_many, via: BuyerAgentProperties}
+  - {from: Member, to: Property, kind: has_many, via: CoBuyerAgentProperties}
+  - {from: Member, to: Media, kind: has_many, via: Media}
+  - {from: Office, to: Property, kind: has_many, via: ListOfficeProperties}
+  - {from: Office, to: Property, kind: has_many, via: CoListOfficeProperties}
+  - {from: Office, to: Property, kind: has_many, via: BuyerOfficeProperties}
+  - {from: Office, to: Property, kind: has_many, via: CoBuyerOfficeProperties}
+  - {from: Office, to: Media, kind: has_many, via: Media}
+
+unexpandable_joins:
+  note: >-
+    These resources publish no navigation properties; they are joined by key
+    value, not by $expand.
+  joins:
+    - {from: TeamMembers, to: Teams, via: TeamKey}
+    - {from: TeamMembers, to: Member, via: MemberKey}
+    - {from: Teams, to: Member, via: TeamLeadKey}
+    - {from: Media, to: Property, via: ResourceRecordKey = Property.ListingKey}
+    - {from: HistoryTransactional, to: any resource, via: ResourceRecordKey / ResourceRecordID}
+    - {from: HistoryTransactional, to: Member, via: ChangedByMemberKey}
+    - {from: HistoryTransactional, to: Field, via: FieldKey}
+    - {from: Lookup, to: Field, via: FieldKey}
+    - {from: Field, to: Model, via: ModelKey}
+    - {from: Lookup, to: Model, via: ModelKey}
+
+in_key_index:
+  description: >-
+    Per-resource field lists that may be queried in batches of up to 300,000
+    records (versus the normal $top ceiling of 1,000) when used with $select.
+    This is the mechanism behind the documented reconciliation strategy.
+  resources:
+    Property: [ListingId, ListingKey, ModificationTimestamp, PhotosChangeTimestamp, PhotosCount, PostalCode, StandardStatus]
+    Media: [MediaKey, MediaModificationTimestamp, ModificationTimestamp, OriginatingSystemID, ResourceRecordID, ResourceRecordKey, SourceSystemID]
+    Member: [MemberKey, MemberMlsId, ModificationTimestamp]
+    Office: [ModificationTimestamp, OfficeKey, OfficeMlsId]
+    Teams: [ModificationTimestamp, TeamKey, TeamLeadKey, TeamLeadMlsId]
+    TeamMembers: [MemberKey, MemberMlsId, ModificationTimestamp, TeamKey, TeamMemberKey]
+    OpenHouse: [ListingId, ListingKey, ModificationTimestamp, OpenHouseId, OpenHouseKey]
+    PropertyRooms: [ListingId, ListingKey, ModificationTimestamp, RoomKey]
+    PropertyUnitTypes: [ListingId, ListingKey, ModificationTimestamp, UnitTypeKey]
+    CustomProperty: [ListingId, ListingKey]
+    Building: [BuildingId, BuildingKey, ComplexId, ModificationTimestamp, PhotosChangeTimestamp, PhotosCount, PostalCode, UniversalPropertyId]
+    HistoryTransactional: [ChangedByMemberID, ChangedByMemberKey, FieldKey, HistoryTransactionalKey, ListAgentKey, ListOfficeKey, ModificationTimestamp, OriginatingSystemHistoryKey, ResourceRecordID, ResourceRecordKey, SourceSystemHistoryKey, SourceSystemID]
+    Field: [FieldKey, ModelKey, ModificationTimestamp]
+    Lookup: [FieldKey, LookupKey, ModelKey, ModificationTimestamp]
+    Model: [ModelKey, ModificationTimestamp]
+
+identifiers:
+  - {name: ListingKey, scope: Trestle, description: Primary key of the Property resource.}
+  - {name: ListingId, scope: MLS, description: The MLS-facing listing number.}
+  - {name: UniversalPropertyId, scope: RESO UPI 2.0, description: RESO Universal Property Identifier, concatenated from other values; Trestle is certified on UPI v2.0.}
+  - {name: CLIP, scope: Cotality proprietary, description: Cotality Integrated Property identifier, machine-learning derived; NOT a RESO identifier.}
+  - {name: OriginatingSystemName, scope: MLS, description: Identifies which source MLS a record came from — the field participant reports key off.}

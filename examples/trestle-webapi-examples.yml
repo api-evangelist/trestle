@@ -1,0 +1,96 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  https://trestle-documentation.corelogic.com/samples/postman/trestle-webapi.json
+  — Trestle's own published Postman collection ("Trestle WebAPI Demonstration"),
+  saved verbatim at postman/trestle-webapi.postman_collection.json (HTTP 200,
+  787 KB, Postman collection schema v2.1.0).
+docs: https://trestle-documentation.corelogic.com/webapi-reference.html
+description: >-
+  Trestle publishes no OpenAPI, so its example corpus lives in a Postman
+  collection rather than in a spec. The collection carries 15 requests and 30
+  saved example request/response pairs covering every OData query convention
+  plus the two Trestle-specific extensions. This index makes the examples
+  discoverable without opening the 787 KB file; the collection itself is the
+  authoritative artifact.
+collection:
+  file: postman/trestle-webapi.postman_collection.json
+  name: Trestle WebAPI Demonstration
+  schema: https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+  auth: oauth2
+  variables: ['{{api_url}} — https://api.cotality.com/trestle']
+  total_requests: 15
+  total_saved_examples: 30
+examples:
+  - name: Authentication
+    method: POST
+    path: /trestle/oidc/connect/token
+    saved_examples: [Successful Authentication, Invalid Authentication]
+    note: >-
+      The successful example carries a real (long-expired, Jan 2021) RESO
+      certification-tool JWT, which is where the token's entitlement claims
+      (client_mlo_id_list, client_product_datafeed_transport, client_role) are
+      visible. It is a published sample, not a live credential.
+  - name: Simple Property Request
+    method: GET
+    path: /trestle/odata/Property
+  - name: Metadata
+    method: GET
+    path: /trestle/odata/$metadata
+  - name: $select
+    method: GET
+    path: /trestle/odata/Property?$select=ListingKey,BathroomsTotalInteger
+    saved_examples: 1
+  - name: $filter - Numbers
+    method: GET
+    path: /trestle/odata/Property?$filter=ListPrice eq 100000
+    saved_examples: 6
+    covers: [eq, ne, gt, ge, lt, le]
+  - name: $filter - Strings
+    method: GET
+    path: "/trestle/odata/Property?$filter=Directions eq 'HWY 67 to Main Street. Third subdivision on the left.'"
+    saved_examples: 5
+    covers: [contains, startswith, endswith, tolower/toupper]
+  - name: $filter - Dates and Timestamps
+    method: GET
+    path: /trestle/odata/Property?$filter=ModificationTimestamp gt 2020-10-31T13:30:30.1234-05:00
+  - name: $filter - Enumerations
+    method: GET
+    path: "/trestle/odata/Property?$filter=Appliances has 'Dishwasher'"
+    saved_examples: 3
+  - name: $filter - Combining Filters
+    method: GET
+    path: "/trestle/odata/Property?$filter=StandardStatus eq 'Active' and ListPrice gt 100000"
+    saved_examples: 4
+    covers: [and, or, IN operator]
+  - name: $count
+    method: GET
+    path: /trestle/odata/Property?$count=true
+    saved_examples: 1
+  - name: $top and $skip
+    method: GET
+    path: /trestle/odata/Property?$top=1000&$skip=1000
+  - name: $expand
+    method: GET
+    path: /trestle/odata/Property?$expand=Media
+    saved_examples: 4
+    covers: [expand with options, multiple expands]
+  - name: $apply
+    method: GET
+    path: /trestle/odata/Property?$apply=groupby((PostalCity))
+    saved_examples: 1
+  - name: Replication
+    method: GET
+    path: /trestle/odata/Property?Replication=true
+    saved_examples: 1
+    extension: true
+  - name: PrettyEnums
+    method: GET
+    path: /trestle/odata/Property?PrettyEnums=true
+    saved_examples: 2
+    extension: true
+caveat: >-
+  The Authentication request is stored in the collection with method GET even
+  though the endpoint requires a POST of an x-www-form-urlencoded body — a
+  defect in the published collection. Every example request needs a Bearer token
+  from a licensed feed to actually execute.

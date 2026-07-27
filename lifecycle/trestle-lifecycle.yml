@@ -1,0 +1,112 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  https://trestle-documentation.corelogic.com/ (release notes index + the host
+  migration notice repeated on every documentation page),
+  https://trestle-documentation.corelogic.com/rets.html, and the live status
+  page at https://status.cotality.com
+description: >-
+  Trestle versions the product (Trestle 5.x release notes) separately from the
+  data dictionary (numbered Content Patches, currently #192). The API path
+  itself is unversioned; compatibility is managed by the RESO Data Dictionary
+  version the feed is certified against. There is no formal deprecation policy
+  document, but there IS an active, dated deprecation in flight: two legacy API
+  hosts are being retired in favour of api.cotality.com with a committed 30-day
+  notice.
+
+versioning:
+  scheme: >-
+    Unversioned URI path (/trestle/odata). Product releases are numbered
+    (Trestle 4.21 → 5.20) and data-dictionary changes ship as numbered Content
+    Patches.
+  current_product_release: '5.20'
+  current_content_patch: '#192'
+  current_content_patch_date: '2026-06-06'
+  standards:
+    reso_web_api: '2.0'
+    reso_data_dictionary: '2.0'
+    odata: '4.0'
+    rets: '1.8'
+  docs: https://trestle-documentation.corelogic.com/
+  detail: changelog/trestle-changelog.yml
+
+deprecation:
+  policy_url: https://trestle-documentation.corelogic.com/
+  formal_policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  notice_period: 30 days (committed for the host migration)
+  active_deprecations:
+    - subject: API host api-trestle.corelogic.com
+      replacement: https://api.cotality.com
+      status: announced
+      announced_timeframe: migration before the end of 2025; new host details with 30-day notice
+      observed_2026_07_26: >-
+        Still serving — https://api-trestle.corelogic.com/trestle/odata answers
+        200 and its OIDC discovery document answers 200.
+    - subject: API host api-prod.corelogic.com
+      replacement: https://api.cotality.com
+      status: announced
+      observed_2026_07_26: >-
+        Still serving — https://api-prod.corelogic.com/trestle/odata answers 200.
+    - subject: Old MediaURL format
+      status: disabled
+      notice: https://trestle-documentation.corelogic.com/notices/Trestle MediaURL Update May 2021.pdf
+    - subject: RETS 1.8 interface
+      status: legacy-but-supported
+      note: >-
+        "Although the RETS specification is no longer being updated by RESO,
+        Trestle continues to provide data access via RETS for customers who do
+        not wish to or cannot switch to WebAPI." No end-of-life date published.
+    - subject: CustomFields JSON blob
+      status: deprecation-considered
+      note: >-
+        Converted to a stringified JSON in the Data Dictionary 2.0 release;
+        Trestle states it is "considering deprecation in favor of a more
+        standard approach".
+  migration_notice_text: >-
+    "Our system API will be migrating to a new host before the end of 2025.
+    Current API endpoints will be deprecated: api-trestle.corelogic.com,
+    api-prod.corelogic.com. New host details will be provided in Q4 2025 with a
+    30-day notice. Current host URL will cease to function after the final
+    notification date. API functionality, authentication, and data formats will
+    remain unchanged; only the host URL will change."
+
+status_page:
+  url: https://status.cotality.com
+  status: 200
+  resolves_to: https://status-cotality-us.trust.pagerduty.com/
+  platform: PagerDuty Status
+  scope: Cotality (US) — company-wide, not Trestle-specific
+  note: >-
+    Client-side rendered; no anonymous JSON status API was found. Trestle is not
+    named as a distinct component in the anonymously readable shell.
+
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No public SLA or uptime target. Service levels are governed by the per-MLS
+    licence contract, which is not published.
+
+maintenance_notices:
+  - title: Trestle Data Maintenance (May 2021)
+    url: https://trestle-documentation.corelogic.com/notices/Trestle Data Maintenance May 2021.pdf
+  - title: Trestle MediaURL Update (May 2021)
+    url: https://trestle-documentation.corelogic.com/notices/Trestle MediaURL Update May 2021.pdf
+  - title: Data Dictionary 2.0 rollout
+    when: 'Monday, Sept 30th 6AM EST - 12PM EST'
+    impact: >-
+      Expected 200m+ row updates across all resources; ModificationTimestamp
+      touched only for on-market listings; off-market data required a re-pull.
+
+deprecated_operations: []
+deprecated_operations_note: >-
+  Cannot be derived — no OpenAPI exists and the OData $metadata document is
+  behind a Bearer token.
+
+support:
+  email: trestlesupport@cotality.com
+  slack: https://clgx-res.slack.com
+  slack_access: invite-only; request access by emailing support
+  company_support: https://www.cotality.com/support

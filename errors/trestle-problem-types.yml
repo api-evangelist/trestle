@@ -1,0 +1,91 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  https://trestle-documentation.corelogic.com/webapi.html#errors (the published
+  Web API error table) and
+  https://trestle-documentation.corelogic.com/participant-reporting-api.html
+  (the Participant Reporting error contract), plus live status codes observed
+  while probing the API host.
+docs: https://trestle-documentation.corelogic.com/webapi.html
+format: odata
+format_note: >-
+  Not RFC 9457. Trestle publishes no application/problem+json media type and no
+  error `type` URIs. Errors are OData-compliant error payloads (the 5.8 release
+  notes record "It provides OData-compliant error messages"), i.e. a JSON body
+  with an `error` object carrying `code` and `message`. Status codes carry the
+  semantics; there is no machine-readable error-code registry.
+
+envelope:
+  media_type: application/json
+  shape: 'OData error object: {"error": {"code": ..., "message": ...}}'
+  note: >-
+    Trestle publishes no schema for the error object and no enumerated
+    application error codes, so only the HTTP-status layer below is documented.
+
+problems:
+  - status: 400
+    title: Bad Request
+    description: Indicates an invalid set of credentials or connection type.
+    remediation: >-
+      Check client_id/client_secret and that the scope matches the feed type —
+      RETS credentials must use scope=rets; scope=api is rejected on a RETS
+      connection.
+    source: https://trestle-documentation.corelogic.com/webapi.html
+  - status: 401
+    title: Unauthorized
+    description: >-
+      Indicates an attempt to access the WebAPI without a valid access token.
+    remediation: >-
+      POST client_credentials to /trestle/oidc/connect/token and send the
+      resulting token as `Authorization: Bearer <token>`. Tokens last 28800s.
+    observed: >-
+      Live and anonymous: GET /trestle/odata/$metadata returns 401 with
+      `www-authenticate: Bearer` and still emits the quota headers
+      (quotatype, minute-quota-limit, hour-quota-limit).
+    source: https://trestle-documentation.corelogic.com/webapi.html
+  - status: 404
+    title: Not Found
+    description: >-
+      Indicates an attempt to access a resource that does not exist or is not
+      available.
+    remediation: >-
+      Confirm the entity set is in the service document
+      (openapi/trestle-odata-service-document.json) AND that your licence
+      covers it — entity sets you are not licensed for are "not available".
+    source: https://trestle-documentation.corelogic.com/webapi.html
+  - status: 429
+    title: Quota Exceeded
+    description: Indicates too many attempts in the past minute or hour.
+    remediation: >-
+      Back off exponentially (documented recommendation: 1, 2, 4, 8, 16, 32…
+      seconds) and read Minute-Quota-Limit / Hour-Quota-Limit /
+      Hour-Quota-ResetTime to pace requests. See rate-limits/trestle-rate-limits.yml.
+    source: https://trestle-documentation.corelogic.com/webapi-at-scale.html
+  - status: 500
+    title: Server Error
+    description: Indicates an error in Trestle.
+    remediation: Retry; if persistent, contact trestlesupport@cotality.com.
+    source: https://trestle-documentation.corelogic.com/webapi.html
+  - status: 504
+    title: Gateway Timeout
+    description: Indicates that the query took too long to process.
+    remediation: >-
+      Narrow the $filter, reduce $expand fan-out, or use the replication
+      endpoint (Replication=true) for large pulls.
+    source: https://trestle-documentation.corelogic.com/webapi.html
+
+documented_error_conditions:
+  - condition: '$top greater than 300,000 on an InKeyIndex query'
+    behavior: Returns an error (fixed in Trestle 5.4 to error correctly).
+    source: release notes — Trestle 5.4
+  - condition: Participant Reporting submission validation
+    behavior: >-
+      POST /trestle/report/TpParticipantReport validates ReportDate (must be
+      less than 60 days in the past), ReportFrequency (Daily or Monthly, must
+      match the MLS's settings) and the Items array.
+    source: https://trestle-documentation.corelogic.com/participant-reporting-api.html
+
+gaps:
+  - No RFC 9457 problem+json.
+  - No published application-level error code registry (no numeric or string error codes enumerated).
+  - No error schema published, because no OpenAPI or reachable $metadata exists.

@@ -23,7 +23,7 @@ description: >-
   sponsors it or the technology provider files periodic participant reports. Trestle is
   RESO-certified and publicly documented, and still effectively uncallable without a
   signed licence. Certification is not reachability.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/groq.png
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/corelogic.png
 tags:
 - Real Estate
 - United States
@@ -38,6 +38,7 @@ tags:
 - Listing Syndication
 created: '2026-07-26'
 modified: '2026-07-26'
+enriched: '2026-07-26'
 specificationVersion: '0.19'
 apis:
 - aid: trestle:trestle-reso-web-api
@@ -146,6 +147,8 @@ apis:
   - type: Documentation
     url: https://trestle-documentation.corelogic.com/rets-connector.html
 common:
+- type: DomainSecurity
+  url: security/trestle-domain-security.yml
 - type: Website
   url: https://www.cotality.com/products/trestle
 - type: Documentation
@@ -166,6 +169,74 @@ common:
 - type: Certification
   url: https://www.reso.org/blog/corelogic-trestle-achieves-reso-platinum-certification-2/
   name: CoreLogic Trestle achieves RESO Platinum certification
+- type: DeveloperPortal
+  url: https://trestle-documentation.corelogic.com/
+  name: Trestle developer documentation portal (public, no login)
+- type: GettingStarted
+  url: https://trestle-documentation.corelogic.com/webapi.html
+  name: Getting Started with Trestle WebAPI
+- type: APIReference
+  url: https://trestle-documentation.corelogic.com/webapi-reference.html
+  name: Trestle WebAPI Reference (OData conventions + Trestle extensions)
+- type: Blog
+  url: https://www.cotality.com/insights
+  name: Cotality Insights
+- type: TermsOfService
+  url: https://www.cotality.com/legal/terms-of-use
+- type: PrivacyPolicy
+  url: https://www.cotality.com/legal/privacy-policy
+- type: StatusPage
+  url: https://status.cotality.com
+  name: Cotality US status page (PagerDuty) — company-wide, not Trestle-specific
+- type: Deprecation
+  url: https://trestle-documentation.corelogic.com/
+  name: Host migration notice — api-prod/api-trestle.corelogic.com deprecated in favour of api.cotality.com with 30-day notice
+- type: Security
+  url: https://www.cotality.com/legal/responsible-disclosure-policy
+  name: Cotality Responsible Disclosure Policy (Bugcrowd submission form)
+- type: VulnerabilityDisclosure
+  url: security/trestle-vulnerability-disclosure.yml
+- type: Compliance
+  url: https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification
+  name: RESO certifications — Web API Platinum, Data Dictionary v2.0, UPI v2.0
+- type: Conformance
+  url: conformance/trestle-conformance.yml
+- type: Authentication
+  url: authentication/trestle-authentication.yml
+- type: OAuthScopes
+  url: scopes/trestle-scopes.yml
+- type: OpenIDConnect
+  url: well-known/trestle-openid-configuration.json
+  name: OIDC discovery document (anonymous, HTTP 200)
+- type: WellKnown
+  url: well-known/trestle-well-known.yml
+- type: Packages
+  url: packages/trestle-packages.yml
+  name: Client libraries (all third party — Trestle ships no first-party SDK)
+- type: ErrorCatalog
+  url: errors/trestle-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/trestle-lifecycle.yml
+- type: ChangeLog
+  url: changelog/trestle-changelog.yml
+- type: ChangeLog
+  url: https://trestle-documentation.corelogic.com/
+  name: Trestle release notes and Content Patches
+- type: Conventions
+  url: conventions/trestle-conventions.yml
+- type: DataModel
+  url: data-model/trestle-data-model.yml
+- type: RateLimits
+  url: rate-limits/trestle-rate-limits.yml
+- type: Postman
+  url: postman/trestle-webapi.postman_collection.json
+  name: Trestle WebAPI Demonstration (published Postman collection)
+- type: Examples
+  url: examples/trestle-webapi-examples.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/trestle-llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

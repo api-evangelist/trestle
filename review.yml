@@ -149,8 +149,20 @@ sectorPosture:
       HTTP Basic with Base64-encoded client_id:client_secret, or OAuth2 bearer token with
       scope=rets (scope=api returns 400). Digest authentication explicitly unsupported.
     openidConfiguration: >-
-      No anonymously served discovery document. /trestle/.well-known/openid-configuration
-      and the host-root /.well-known/openid-configuration both returned 404.
+      CORRECTED 2026-07-26 (enrichment round): a real, anonymously readable OpenID
+      Connect discovery document IS served — at
+      https://api.cotality.com/trestle/oidc/.well-known/openid-configuration (200),
+      with a JWKS at the same prefix. The bootstrap probed only
+      /trestle/.well-known/openid-configuration and the host root, which both 404.
+      The document advertises issuer https://api.cotality.com, scopes_supported
+      [api, rets, offline_access], grant_types_supported [authorization_code,
+      client_credentials, refresh_token, implicit, device_code], RS256 id_token
+      signing and PKCE S256. Note the issuer/discovery-path mismatch: every
+      endpoint it advertises resolves to
+      trestle-auth-prd.kfusw1prd.solutions.corelogic.com, a host that does not
+      resolve publicly, so integrators must use the documented
+      api.cotality.com/trestle/oidc/connect/token path.
+      Saved verbatim at well-known/trestle-openid-configuration.json.
     rateLimits:
       documented:
         webapi: 7,200 queries/hour; 180 queries/minute
@@ -170,8 +182,17 @@ sectorPosture:
       A webapi-libraries.html and a rets-libraries.html page exist listing third-party
       client libraries; no first-party Trestle SDK was identified during this bootstrap.
     postman: >-
-      The Web API reference page mentions Postman in passing; no published Trestle Postman
-      collection URL was found.
+      CORRECTED 2026-07-26 (enrichment round): Trestle DOES publish a Postman
+      collection. The "Check out our Postman Collection" link on webapi-reference.html
+      resolves to
+      https://trestle-documentation.corelogic.com/samples/postman/trestle-webapi.json
+      (200, 787 KB, collection schema v2.1.0) — "Trestle WebAPI Demonstration",
+      15 requests and 30 saved request/response examples covering every OData
+      convention plus Replication=true and PrettyEnums=true. Saved verbatim at
+      postman/trestle-webapi.postman_collection.json; indexed in
+      examples/trestle-webapi-examples.yml. With no OpenAPI published, this
+      collection is the closest thing Trestle has to a machine-readable request
+      contract.
     changelog: >-
       Release notes and content-patch documents are published as PDFs from the
       documentation index, plus a Google Sheets "Field & Lookup Change Document".

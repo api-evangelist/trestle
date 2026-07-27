@@ -1,0 +1,160 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  https://trestle-documentation.corelogic.com/webapi-libraries.html and
+  https://trestle-documentation.corelogic.com/rets-libraries.html — the two
+  pages Trestle publishes for client libraries — plus registry checks against
+  npm, PyPI, Packagist, Maven Central, NuGet and RubyGems for a first-party
+  "trestle" client.
+description: >-
+  Trestle ships NO first-party SDK in any language. Both library pages document
+  how to bend third-party RESO/RETS/OData libraries into working with Trestle's
+  OAuth2 client_credentials flow — the PHP and Python RESO clients need their
+  token request patched, Apache Olingo needs a custom OAuth2-aware HttpClient
+  factory, and RestSharp needs a custom authenticator. Every entry below is
+  third-party (official: false); none is published or maintained by Trestle,
+  CoreLogic or Cotality. No package named trestle exists on npm, PyPI,
+  Packagist, Maven Central, NuGet or RubyGems.
+
+first_party_sdks: false
+first_party_note: >-
+  The closest thing to a first-party client is RETS Connector, a CoreLogic
+  desktop tool for bulk RETS pulls, documented at
+  https://trestle-documentation.corelogic.com/rets-connector.html — a GUI
+  application, not a package or a CLI.
+
+packages:
+  - language: php
+    registry: composer
+    name: RESO-WebAPI-Client-PHP
+    url: https://github.com/RESOStandards/RESO-WebAPI-Client-PHP
+    install: composer (or manual install per the repo README)
+    official: false
+    maintainer: RESO (Real Estate Standards Organization)
+    surface: Trestle RESO Web API
+    note: >-
+      Documented as compatible with Trestle "except for the authentication
+      portion" — the $params array in requestAccessToken() in
+      lib/OpenIDConnect.php must be changed to a client_credentials grant.
+  - language: python
+    registry: pypi
+    name: reso_api
+    url: https://github.com/RESOStandards/RESO-WebAPI-Client-PHP
+    install: n/a — Trestle documents the class, not an install command
+    official: false
+    maintainer: third party (RESO WebAPI Python client)
+    surface: Trestle RESO Web API
+    note: >-
+      Trestle publishes an OAuth2Authentication subclass of OpenIDAuthentication
+      that overrides request_access_token() for the client_credentials grant.
+      Trestle links no canonical repository or PyPI page for this library.
+  - language: java
+    registry: maven
+    name: org.apache.olingo (Olingo OData client)
+    url: https://olingo.apache.org/
+    install: Maven/Gradle dependency on Apache Olingo
+    official: false
+    maintainer: Apache Software Foundation
+    surface: Trestle RESO Web API
+    note: >-
+      Requires a custom OAuth2HttpClientFactory extending
+      DefaultHttpClientFactory that injects the Bearer token and strips
+      OData-MaxVersion. RESO's WebAPI Commander
+      (https://github.com/RESOStandards/web-api-commander/) is built on Olingo.
+  - language: java
+    registry: github
+    name: web-api-commander
+    url: https://github.com/RESOStandards/web-api-commander/
+    install: build from source
+    official: false
+    maintainer: RESO
+    surface: Trestle RESO Web API
+  - language: csharp
+    registry: nuget
+    name: RestSharp
+    url: https://www.nuget.org/packages/RestSharp
+    install: dotnet add package RestSharp
+    official: false
+    maintainer: RestSharp project
+    surface: Trestle RESO Web API
+    note: >-
+      No OData bindings; Trestle documents an AuthenticatorBase subclass that
+      fetches and injects the Bearer token.
+  - language: javascript
+    registry: npm
+    name: openresync
+    url: https://github.com/tylercollier/openresync
+    install: clone / npm install per the repo
+    official: false
+    maintainer: Tyler Collier
+    surface: Trestle RESO Web API (replication)
+    homepage: https://openresync.com
+    note: >-
+      Open-source Node.js replication tool that syncs RESO Web API sources
+      (Trestle, MLS Grid, Bridge Interactive) into MySQL/Solr. Named by Trestle
+      under "Synchronization Tools".
+  - language: cpp
+    registry: github
+    name: libRETS
+    url: https://github.com/NationalAssociationOfRealtors/libRETS
+    install: build from source
+    official: false
+    maintainer: National Association of Realtors
+    surface: Trestle RETS
+  - language: ruby
+    registry: rubygems
+    name: rets
+    url: https://github.com/estately/rets
+    install: gem install rets
+    official: false
+    maintainer: Estately
+    surface: Trestle RETS
+  - language: javascript
+    registry: npm
+    name: rets-client
+    url: https://github.com/sbruno81/rets-client
+    install: npm install rets-client
+    official: false
+    maintainer: sbruno81
+    surface: Trestle RETS
+  - language: php
+    registry: packagist
+    name: PHRETS
+    url: https://github.com/troydavisson/PHRETS
+    install: composer require troydavisson/phrets
+    official: false
+    maintainer: Troy Davisson
+    surface: Trestle RETS
+
+registries_probed:
+  - registry: npm
+    query: trestle
+    first_party_hit: false
+    note: >-
+      Hits are all unrelated homonyms — trestle (an Express/Jade project
+      generator), @trestlescan/cli-* (a secret scanner), and
+      n8n-nodes-trestle / @pipedream/trestle, which wrap Trestle IQ's phone
+      validation and contact verification API (trestleiq.com), a DIFFERENT
+      company. None relates to CoreLogic/Cotality Trestle MLS data.
+  - registry: pypi
+    query: trestle
+    first_party_hit: false
+    note: >-
+      pypi.org/project/trestle exists but is unrelated to this provider;
+      reso-api returns 404.
+  - registry: rubygems
+    query: trestle
+    first_party_hit: false
+    note: The trestle gem is an unrelated Rails admin framework.
+  - registry: packagist
+    query: trestle
+    first_party_hit: false
+    note: Top hit nuradius/trestle is an unrelated PHP middleware library.
+  - {registry: maven-central, query: trestle, first_party_hit: false}
+  - {registry: nuget, query: trestle, first_party_hit: false}
+
+homonym_warning: >-
+  "Trestle" is a heavily overloaded package name. Trestle IQ (trestleiq.com),
+  a phone/identity verification API, owns most of the npm and integration-
+  platform surface that carries the name. Do not treat those packages as
+  clients for this provider.

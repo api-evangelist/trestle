@@ -1,0 +1,94 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  Live probes of the /.well-known/ discovery surface on every host in apis.yml
+  (baseURL + Website + Documentation + SignUp/Login) during the 2026-07-26
+  enrichment round. The host-root /.well-known/ surface is empty across all four
+  hosts, but Trestle's IdentityServer mounts a REAL, anonymously readable OpenID
+  Connect discovery document under the /trestle/oidc/ path prefix — the previous
+  round probed only the host root and recorded a 404. That document is the
+  machine-readable half of the authentication contract and is saved verbatim.
+description: >-
+  Trestle publishes no security.txt, no api-catalog, and no ai-plugin.json.
+  It does publish OIDC discovery (RFC 8414-shaped) and a JWKS at a path-prefixed
+  location under the API host, which enumerates the real scopes (api, rets,
+  offline_access), grant types and endpoints.
+hosts:
+  - host: https://api.cotality.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /trestle/oidc/.well-known/openid-configuration
+        status: 200
+        file: trestle-openid-configuration.json
+        note: >-
+          OpenID Connect discovery for the Trestle IdentityServer. issuer is
+          https://api.cotality.com; every endpoint resolves to
+          trestle-auth-prd.kfusw1prd.solutions.corelogic.com (that host is not
+          publicly resolvable on its own).
+      - path: /trestle/oidc/.well-known/openid-configuration/jwks
+        status: 200
+        file: trestle-openid-jwks.json
+        note: Single RS256 signing key.
+      - path: /trestle/.well-known/oauth-protected-resource
+        status: 404
+      - path: /trestle/.well-known/openid-configuration
+        status: 404
+  - host: https://www.cotality.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://trestle-documentation.corelogic.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://trestle.corelogic.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+legacy_hosts:
+  - host: https://api-prod.corelogic.com
+    path: /trestle/oidc/.well-known/openid-configuration
+    status: 200
+    note: Legacy host, documented as being deprecated in favour of api.cotality.com.
+  - host: https://api-trestle.corelogic.com
+    path: /trestle/oidc/.well-known/openid-configuration
+    status: 200
+    note: Legacy host, documented as being deprecated in favour of api.cotality.com.
+security_txt:
+  published: false
+  note: >-
+    No RFC 9116 security.txt on any host. Cotality does run a real vulnerability
+    disclosure program (Bugcrowd) — see security/trestle-vulnerability-disclosure.yml.

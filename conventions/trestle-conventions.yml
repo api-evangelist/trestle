@@ -1,0 +1,149 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  https://trestle-documentation.corelogic.com/webapi.html,
+  https://trestle-documentation.corelogic.com/webapi-reference.html,
+  https://trestle-documentation.corelogic.com/webapi-at-scale.html,
+  https://trestle-documentation.corelogic.com/rets.html and the published
+  Postman collection at postman/trestle-webapi.postman_collection.json
+docs: https://trestle-documentation.corelogic.com/webapi-reference.html
+description: >-
+  The cross-cutting request/response semantics that apply across every Trestle
+  Web API entity set. Trestle inherits almost all of them from OData 4.0 / the
+  RESO Web API standard rather than inventing its own, and adds two
+  Trestle-specific query extensions (Replication and PrettyEnums). This is a
+  read-only replication API: there is no write path on the RESO feed, hence no
+  idempotency contract.
+
+base_url: https://api.cotality.com/trestle/odata
+api_style: OData 4.0 (RESO Web API 2.0) over HTTPS, JSON responses
+legacy_style: RETS 1.8 at https://api.cotality.com/trestle/rets (session-less)
+
+authentication:
+  scheme: OAuth2 client_credentials, Bearer token
+  token_url: https://api.cotality.com/trestle/oidc/connect/token
+  scope: api (Web API / Participant Reporting) | rets (RETS)
+  token_lifetime_seconds: 28800
+  detail: authentication/trestle-authentication.yml
+
+idempotency:
+  supported: false
+  reason: >-
+    The RESO Web API surface is read-only (GET only); there is no
+    Idempotency-Key header, no documented retry-safety contract, and no
+    published idempotent write semantics. The two write surfaces that do exist —
+    POST /trestle/report/TpParticipantReport and the Direct Web API's
+    POST/PATCH/DELETE operations against Matrix — document no idempotency key
+    either. Participant reports are keyed by ReportDate + ReportFrequency, which
+    gives natural replace-by-day semantics, but Trestle does not describe it as
+    an idempotency contract.
+
+pagination:
+  style: offset (OData)
+  request_params:
+    $top: Records per page. Maximum 1000 (300,000 for key-only InKeyIndex queries).
+    $skip: Number of records to skip.
+  response_fields:
+    value: array of records
+    '@odata.context': the $metadata context URI
+    '@odata.nextLink': absolute URL for the next page — follow instead of tracking $skip
+    '@odata.count': total count when $count=true is requested
+  docs: https://trestle-documentation.corelogic.com/webapi.html
+  note: >-
+    For large pulls Trestle directs clients at the replication endpoint rather
+    than deep paging.
+
+filtering:
+  mechanism: OData $filter
+  operators: [eq, ne, gt, ge, lt, le, and, or, not, has]
+  string_functions: >-
+    OData string functions are supported; nested string functions in $filter
+    were added in Trestle 5.4/5.9.
+  enumerations: "$filter=Appliances has 'Dishwasher'"
+  example: "$filter=StandardStatus eq 'Active' and ListPrice gt 100000"
+  docs: https://trestle-documentation.corelogic.com/webapi-reference.html
+
+field_selection:
+  mechanism: $select
+  note: >-
+    Selecting only key fields unlocks the 300,000-record batch ceiling; the
+    per-resource InKeyIndex field list is published on each resource's metadata
+    page.
+
+expansion:
+  mechanism: $expand
+  navigation_properties: data-model/trestle-data-model.yml
+  example: $expand=Rooms,Units,OpenHouse,CustomProperty,Media
+  note: >-
+    Documented as the primary quota-saving technique. PrettyEnums=true was made
+    to work across $expand in Trestle 5.4.
+
+aggregation:
+  mechanism: $apply
+  supported: partial
+  example: $apply=groupby((PostalCity))
+  note: groupby() support is documented as partial.
+
+counting:
+  mechanism: $count=true
+
+trestle_extensions:
+  - name: Replication
+    param: Replication=true
+    description: >-
+      Trestle-specific replication endpoint mode for highly efficient bulk
+      queries; documented as able to return more than 1,000,000 records.
+    docs: https://trestle-documentation.corelogic.com/webapi-reference.html
+  - name: PrettyEnums
+    param: PrettyEnums=true
+    description: >-
+      Returns human-readable enumeration display values instead of raw
+      enumeration tokens. Works across $expand as of Trestle 5.4.
+
+change_capture:
+  model: pull-based replication (no webhooks, no events)
+  property_timestamp: ModificationTimestamp
+  media_timestamp: PhotosChangeTimestamp (lives on the Property resource)
+  reconciliation: >-
+    Deletions/off-market records are not signalled. Clients must periodically
+    pull the full key list ($select=<Key>&$top=300000) and remove local records
+    whose keys are absent.
+  mass_update_warning: >-
+    Source MLSs can mass-update every record; the docs warn clients to be
+    prepared for it (the Data Dictionary 2.0 rollout alone touched an expected
+    200m+ rows).
+  docs: https://trestle-documentation.corelogic.com/webapi-at-scale.html
+
+media:
+  mechanism: >-
+    Query the Media resource filtered by ResourceRecordKey (= Property
+    ListingKey), order by Order, and download each MediaURL.
+  media_url: Publicly accessible URL returned per media record.
+  quota: Metered against a separate, larger public-URL quota.
+
+request_tracing:
+  request_id_header: null
+  note: No request-id / correlation-id header is documented.
+
+versioning:
+  scheme: >-
+    Product releases (Trestle 5.x) plus numbered Content Patches for the data
+    dictionary; the API path itself is unversioned (/trestle/odata).
+  standard_versions: {reso_web_api: '2.0', odata: '4.0', reso_data_dictionary: '2.0', rets: '1.8'}
+  header: null
+  detail: lifecycle/trestle-lifecycle.yml
+
+error_envelope:
+  format: OData error object (JSON)
+  status_codes: [400, 401, 404, 429, 500, 504]
+  detail: errors/trestle-problem-types.yml
+
+rate_limit_signaling:
+  headers: [Minute-Quota-Limit, Hour-Quota-Limit, Hour-Quota-ResetTime, QuotaType]
+  throttled_status: 429
+  detail: rate-limits/trestle-rate-limits.yml
+
+user_agent:
+  convention: >-
+    Every published code sample sets a descriptive User-Agent (e.g.
+    "TrestleQuotaTool/1.0 Python"); Trestle does not document it as mandatory.

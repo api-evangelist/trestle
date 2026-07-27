@@ -1,0 +1,144 @@
+generated: '2026-07-26'
+method: searched
+source: https://trestle-documentation.corelogic.com/
+docs: https://trestle-documentation.corelogic.com/
+description: >-
+  Trestle publishes a dated change log on the documentation index, split into
+  "Recent Changes" and "Previous Changes". Two kinds of entry interleave:
+  numbered Content Patches (data-dictionary changes — fields, lookup values,
+  resources) and numbered product releases (Trestle 5.x, platform behaviour).
+  Every entry links a PDF; the date in the PDF filename is the entry date.
+  A companion "Field & Lookup Change Document" is maintained as a Google Sheet.
+  This artifact captures the recent window (Content Patch #180 → #192 plus the
+  most recent product release); the live index is the source of truth.
+
+versioning:
+  scheme: numbered content patches (data dictionary) + numbered product releases
+  current_content_patch: '#192'
+  current_product_release: '5.20'
+  detail: lifecycle/trestle-lifecycle.yml
+
+field_change_document:
+  type: Google Sheet
+  url: https://docs.google.com/spreadsheets/d/1mJ6UoqHemXhSgCJqAQKQZSrbVtCT6nx2/edit?usp=sharing&ouid=102124821205257899726&rtpof=true&sd=true
+  note: Field & Lookup Change Document referenced from the documentation index.
+
+entries:
+  - version: 'Content Patch #192'
+    date: '2026-06-06'
+    kind: content-patch
+    latest: true
+    highlights: [2 field changes, 12 new lookup values across multiple resources]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch June62026.pdf
+  - version: 'Content Patch #191'
+    date: '2026-05-14'
+    kind: content-patch
+    breaking: [2 fields removed]
+    additions: [13 new fields, 31 new lookup values]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch May142026.pdf
+  - version: 'Content Patch #190'
+    date: '2026-04-16'
+    kind: content-patch
+    additions: [1 new resource, 35 new fields, 21 new lookup values]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch Apr162026.pdf
+  - version: 'Content Patch #189'
+    date: '2026-03-04'
+    kind: content-patch
+    additions: [3 fields, 37 new lookup values]
+    highlights: [30 field changes]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch Mar42026.pdf
+  - version: 'Content Patch #188'
+    date: '2026-01-27'
+    kind: content-patch
+    additions: [98 new lookup values]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch Jan272026.pdf
+  - version: 'Content Patch #187'
+    date: '2025-11-04'
+    kind: content-patch
+    additions: [52 new lookup values]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch Nov42025.pdf
+  - version: 'Content Patch #186'
+    date: '2025-10-07'
+    kind: content-patch
+    additions: [40 new lookup values]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch Oct2025.pdf
+  - version: 'Content Patch #185'
+    date: '2025-09-02'
+    kind: content-patch
+    additions: [3 fields, 66 lookup values]
+    highlights: [4 field changes across multiple resources]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch Sept22025.pdf
+  - version: 'Content Patch #184'
+    date: '2025-07-22'
+    kind: content-patch
+    additions: [5 new lookup values]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch July222025.pdf
+  - version: 'Content Patch #183'
+    date: '2025-06-10'
+    kind: content-patch
+    additions: [43 new fields, 27 lookup values]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch June102025.pdf
+  - version: 'Content Patch #182'
+    date: '2025-05-15'
+    kind: content-patch
+    additions: [42 new fields, 27 new lookup values]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch May152025.pdf
+  - version: 'Content Patch #181'
+    date: '2025-02-11'
+    kind: content-patch
+    breaking: [9 lookup values removed]
+    additions: [2 new fields, 31 new lookup values]
+    highlights: [9 fields updated]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch Feb112025.pdf
+  - version: 'Content Patch #180'
+    date: '2025-01-29'
+    kind: content-patch
+    additions: [11 new fields, 12 new lookup values]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch Jan292025.pdf
+  - version: 'Content Patch #177'
+    date: '2024-09-30'
+    kind: content-patch
+    breaking: [9 lookup values removed, 4 fields removed]
+    additions: [26 new fields, 56 new lookup values]
+    highlights: [21 field changes, 1068 lookup replacements — the Data Dictionary 2.0 rollout patch]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch Sept302024.pdf
+  - version: 'Content Patch #170'
+    date: '2024-02-20'
+    kind: content-patch
+    breaking: [14 lookup values removed, 5 fields removed]
+    additions: [3 new resources, 251 new fields, 510 new lookup values]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle Content Patch February202024.pdf
+  - version: 'Trestle 5.20'
+    date: '2021-06-22'
+    kind: release
+    highlights:
+      - single sign-on
+      - '"contractless" connections to broker accounts'
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle 5.20 Release Notes.pdf
+  - version: 'Trestle 5.9'
+    date: '2020-12-09'
+    kind: release
+    highlights: [support for nested OData string functions in $filter]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle 5.9 Release Notes.pdf
+  - version: 'Trestle 5.8'
+    date: '2020-11-17'
+    kind: release
+    highlights: [OData-compliant error messages, more $expand options for WebAPI]
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle 5.8 Release Notes.pdf
+  - version: 'Trestle 5.4'
+    date: '2020-08-27'
+    kind: release
+    highlights:
+      - '$top greater than 300,000 on an InKeyIndex query now correctly returns an error'
+      - PrettyEnums=true now works across $expand
+    url: https://trestle-documentation.corelogic.com/release_notes/Trestle 5.4 Release Notes.pdf
+
+notes:
+  cadence: >-
+    Content patches land roughly monthly to every six weeks; the numbered
+    product releases (Trestle 5.x) stopped being published after 5.20 in 2021 —
+    since then the public log is content patches only.
+  breaking_change_signal: >-
+    Removed fields and removed lookup values are called out per patch, which is
+    the only breaking-change signal Trestle publishes. There is no
+    Deprecation/Sunset header and no per-field deprecation window.

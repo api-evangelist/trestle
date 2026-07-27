@@ -1,0 +1,134 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  https://www.reso.org/blog/corelogic-trestle-achieves-reso-platinum-certification-2/,
+  https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification,
+  https://trestle-documentation.corelogic.com/webapi.html,
+  https://trestle-documentation.corelogic.com/webapi-reference.html,
+  https://trestle-documentation.corelogic.com/rets.html, the live OIDC discovery
+  document (well-known/trestle-openid-configuration.json) and the anonymously
+  readable OData service document (openapi/trestle-odata-service-document.json).
+description: >-
+  Trestle is one of the few providers in this catalog whose conformance claims
+  are third-party certified rather than self-asserted: RESO awards Web API
+  Platinum, Data Dictionary and UPI certifications and publishes them. Note the
+  gap this repo exists to record — certification is not reachability. Every
+  certified surface below returns 401 without a signed per-MLS licence.
+
+standards:
+  - id: reso-web-api-2.0
+    conforms: true
+    certification: Platinum
+    certified_by: RESO (Real Estate Standards Organization)
+    evidence: >-
+      "RESO has awarded Platinum-level certification to Trestle for its Web API
+      listing transmission service."
+    sources:
+      - https://www.reso.org/blog/corelogic-trestle-achieves-reso-platinum-certification-2/
+      - https://members.councilofmls.org/news/news.asp?id=419745
+  - id: reso-data-dictionary-2.0
+    conforms: true
+    certification: vendor certification
+    date: '2024-10-11'
+    certified_by: RESO
+    evidence: >-
+      CoreLogic "has officially received RESO vendor certification for the
+      latest version 2.0 of the RESO Data Dictionary."
+    sources:
+      - https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification
+  - id: reso-upi-2.0
+    conforms: true
+    certification: UPI v2.0
+    certified_by: RESO
+    evidence: >-
+      Described as "the first multiple listing data distributor certified on UPI
+      version 2.0". CLIP (Cotality Integrated Property) is a separate,
+      proprietary, non-RESO property identifier.
+    sources:
+      - https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification
+  - id: odata-4.0
+    conforms: true
+    evidence: >-
+      Service document at https://api.cotality.com/trestle/odata returns
+      @odata.context and an EntitySet-kind value array; responses carry
+      @odata.nextLink and @odata.count; $filter/$select/$top/$skip/$expand/$apply
+      are documented per OData 4.0.
+    caveat: >-
+      $apply=groupby() support is documented as partial. The $metadata CSDL
+      document — the OData conformance artifact — returns 401.
+  - id: rets-1.8
+    conforms: true
+    evidence: >-
+      "Trestle's RETS is based on and compliant with the RETS 1.8 specification
+      and the RESO Data Dictionary standard."
+    caveat: >-
+      Session-less implementation (login need not precede Search/GetObject) and
+      digest authentication is explicitly not supported, both deviations from
+      typical RETS client expectations.
+    sources: [https://trestle-documentation.corelogic.com/rets.html]
+  - id: oauth2-client-credentials
+    conforms: true
+    evidence: >-
+      RFC 6749 client_credentials grant documented and advertised in
+      grant_types_supported; 8-hour Bearer tokens.
+    sources: [well-known/trestle-openid-configuration.json]
+  - id: openid-connect-discovery
+    conforms: true
+    evidence: >-
+      Anonymously readable discovery document at
+      /trestle/oidc/.well-known/openid-configuration with issuer, jwks_uri,
+      scopes_supported, grant_types_supported, RS256 id_token signing and
+      PKCE (S256) support.
+    caveat: >-
+      Served under a path prefix rather than at the host root, so standard
+      root-relative discovery (issuer https://api.cotality.com +
+      /.well-known/openid-configuration) fails with a 404 — an RFC 8414 /
+      OIDC Discovery 1.0 issuer-mismatch that will break strict OIDC clients.
+    sources: [well-known/trestle-openid-configuration.json]
+  - id: pkce-rfc7636
+    conforms: true
+    evidence: code_challenge_methods_supported = [plain, S256]
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      No application/problem+json. Errors are OData error objects; only HTTP
+      status semantics are documented.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: /.well-known/security.txt returns 404 on all four hosts.
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: >-
+      An active host deprecation is announced in prose on the documentation site
+      with a 30-day notice commitment, but no Sunset or Deprecation response
+      header is documented or observed.
+  - id: openapi
+    conforms: false
+    evidence: >-
+      No OpenAPI or Swagger document is published anywhere on the Trestle or
+      Cotality surface; every candidate path 404s. The machine-readable contract
+      is the OData $metadata CSDL, which is auth-gated.
+  - id: asyncapi
+    conforms: false
+    evidence: >-
+      Not applicable — no event, streaming or webhook surface exists. Change
+      capture is pull-based OData replication.
+  - id: mcp
+    conforms: false
+    evidence: >-
+      Trestle publishes no MCP server. Its parent Cotality does operate one
+      (https://www.cotality.com/platforms/mcp-server) but it serves Climate Risk
+      Analytics, CLIP, Cotality HPI and Property Characteristics — not the
+      Trestle MLS feed. See mcp/trestle-mcp.yml.
+
+compliance_program:
+  published: true
+  kind: industry certification (RESO), not a security/compliance trust center
+  certifications: [RESO Web API Platinum, RESO Data Dictionary 2.0, RESO UPI 2.0]
+  url: https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification
+  security_certifications_published: false
+  security_certifications_note: >-
+    No SOC 2, ISO 27001, PCI DSS, HIPAA or FedRAMP attestation is published on
+    any anonymously reachable Cotality page, and no trust center
+    (trust.cotality.com / security.cotality.com) resolves. Only the
+    responsible-disclosure policy is public.

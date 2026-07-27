@@ -1,0 +1,70 @@
+generated: '2026-07-26'
+method: searched
+source: >-
+  https://api.cotality.com/trestle/oidc/.well-known/openid-configuration
+  (scopes_supported, fetched anonymously, HTTP 200 — saved verbatim at
+  well-known/trestle-openid-configuration.json) cross-checked against the
+  documented scope values in
+  https://trestle-documentation.corelogic.com/webapi.html,
+  https://trestle-documentation.corelogic.com/rets.html and
+  https://trestle-documentation.corelogic.com/participant-reporting-api.html
+docs: https://trestle-documentation.corelogic.com/webapi.html
+description: >-
+  Trestle's OAuth2 scope surface is deliberately tiny: the scope selects a
+  transport/product surface, not a permission set. Row-level authorization is
+  not expressed in scopes at all — it comes from the per-MLS licence contracts
+  attached to the credential (which MLSs, which feed type, IDX vs IDX Plus).
+  There is no published scope-to-permission matrix because there are no
+  fine-grained scopes.
+
+schemes:
+  - name: TrestleIdentityServer
+    type: oauth2
+    source: well-known/trestle-openid-configuration.json
+    flows:
+      - flow: clientCredentials
+        tokenUrl: https://api.cotality.com/trestle/oidc/connect/token
+      - flow: authorizationCode
+        authorizationUrl: https://trestle-auth-prd.kfusw1prd.solutions.corelogic.com/connect/authorize
+        tokenUrl: https://trestle-auth-prd.kfusw1prd.solutions.corelogic.com/connect/token
+        note: >-
+          Advertised by discovery (grant_types_supported includes
+          authorization_code, implicit, refresh_token and device_code) but the
+          documented developer flow is client_credentials only.
+
+scopes:
+  - scope: api
+    description: >-
+      RESO Web API (OData 4.0) access, and Participant Reporting for Web API
+      feeds. The documentation states this "should always be api for WebAPI".
+    flows: [clientCredentials]
+    sources:
+      - well-known/trestle-openid-configuration.json
+      - https://trestle-documentation.corelogic.com/webapi.html
+  - scope: rets
+    description: >-
+      RETS 1.8 access, and Participant Reporting for RETS feeds. Requesting
+      scope=api with RETS credentials is documented to fail with a 400.
+    flows: [clientCredentials]
+    sources:
+      - well-known/trestle-openid-configuration.json
+      - https://trestle-documentation.corelogic.com/rets.html
+  - scope: offline_access
+    description: >-
+      Standard OIDC refresh-token scope, advertised in scopes_supported. Not
+      referenced anywhere in the Trestle developer documentation; the documented
+      client_credentials flow simply re-requests an 8-hour token.
+    flows: [authorizationCode]
+    sources: [well-known/trestle-openid-configuration.json]
+
+authorization_beyond_scopes:
+  model: contract-scoped credentials
+  detail: >-
+    Each credential is issued per product / feed-type pair and carries the set
+    of multiple listing organizations that pair is licensed for. An observed
+    example JWT published in Trestle's own Postman collection carries
+    client_mlo_id_list, client_business_conn_id_list, client_product_id,
+    client_product_datafeed_transport and client_role claims — i.e. entitlement
+    is expressed as claims on the token, not as OAuth scopes.
+  evidence: postman/trestle-webapi.postman_collection.json
+  feed_types_documented: [IDX, IDX Plus]
