@@ -147,6 +147,8 @@ apis:
   - type: Documentation
     url: https://trestle-documentation.corelogic.com/rets-connector.html
 common:
+- type: MCPServer
+  url: mcp/trestle-mcp.yml
 - type: DomainSecurity
   url: security/trestle-domain-security.yml
 - type: Website
