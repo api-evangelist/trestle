@@ -39,7 +39,7 @@ tags:
 created: '2026-07-26'
 modified: '2026-07-26'
 enriched: '2026-07-26'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: trestle:trestle-reso-web-api
   name: Trestle RESO Web API
