@@ -1,50 +1,49 @@
 generated: '2026-07-26'
 method: searched
 status: none
-source: >-
-  Searched trestle-documentation.corelogic.com (all 15 pages in its sitemap),
-  cotality.com, the npm @modelcontextprotocol namespace and the public MCP
-  registries for a Trestle MCP server.
-description: >-
-  Trestle publishes no MCP server, no tool manifest, and no agent-facing surface
-  of any kind. Its parent, Cotality, DOES operate a hosted MCP server — but it
-  fronts a different product line (property intelligence data assets), not the
-  Trestle MLS feed, so it is recorded here as related context rather than wired
-  as a Trestle MCPServer pointer.
+source: Searched trestle-documentation.corelogic.com (all 15 pages in its sitemap), cotality.com, the
+  npm @modelcontextprotocol namespace and the public MCP registries for a Trestle MCP server.
+description: Trestle publishes no MCP server, no tool manifest, and no agent-facing surface of any kind.
+  Its parent, Cotality, DOES operate a hosted MCP server — but it fronts a different product line (property
+  intelligence data assets), not the Trestle MLS feed, so it is recorded here as related context rather
+  than wired as a Trestle MCPServer pointer.
 server: null
 tools: []
 probes:
-  - {url: 'https://trestle-documentation.corelogic.com/ (sitemap, 15 pages)', mcp_mentions: 0}
-  - {url: 'https://api.cotality.com/.well-known/oauth-protected-resource', status: 404}
-  - {url: 'https://api.cotality.com/trestle/.well-known/oauth-protected-resource', status: 404}
+- url: https://trestle-documentation.corelogic.com/ (sitemap, 15 pages)
+  mcp_mentions: 0
+- url: https://api.cotality.com/.well-known/oauth-protected-resource
+  status: 404
+- url: https://api.cotality.com/trestle/.well-known/oauth-protected-resource
+  status: 404
 related_parent_company_server:
   operator: Cotality (CoreLogic)
   page: https://www.cotality.com/platforms/mcp-server
   page_status: 200
-  description: >-
-    "Cotality's Model Context Protocol (MCP) Server provides AI models and
-    autonomous agents with secure, instant access to verified property and
-    location intelligence… Built on the open MCP standard, it acts as a
-    universal bridge between leading systems like ChatGPT, Claude, and Gemini
-    and Cotality's multi-source data repository."
+  description: '"Cotality''s Model Context Protocol (MCP) Server provides AI models and autonomous agents
+    with secure, instant access to verified property and location intelligence… Built on the open MCP
+    standard, it acts as a universal bridge between leading systems like ChatGPT, Claude, and Gemini and
+    Cotality''s multi-source data repository."'
   data_assets_named:
-    - Climate Risk Analytics — Acute Perils
-    - Climate Risk Analytics — Chronic Perils
-    - CLIP
-    - Cotality HPI
-    - Property Characteristics
+  - Climate Risk Analytics — Acute Perils
+  - Climate Risk Analytics — Chronic Perils
+  - CLIP
+  - Cotality HPI
+  - Property Characteristics
   covers_trestle_mls_data: false
   endpoint_published: false
-  access: demo request / login only — no public server URL, no tools/list to introspect, no installation instructions
-  note: >-
-    Because the published asset list contains no MLS listing data and no Trestle
-    surface, this is NOT a Trestle MCP server. Re-evaluate if Cotality publishes
-    an endpoint or adds Trestle resources.
+  access: demo request / login only — no public server URL, no tools/list to introspect, no installation
+    instructions
+  note: Because the published asset list contains no MLS listing data and no Trestle surface, this is
+    NOT a Trestle MCP server. Re-evaluate if Cotality publishes an endpoint or adds Trestle resources.
 candidate_derivation:
   possible: false
-  reason: >-
-    A candidate tool list cannot be derived: there is no OpenAPI, and the OData
-    $metadata document that would enumerate the operable surface returns 401.
-    The 18 entity sets in the anonymously readable service document
-    (openapi/trestle-odata-service-document.json) name the resources but carry
-    no parameters, so any generated inputSchema would be invented.
+  reason: 'A candidate tool list cannot be derived: there is no OpenAPI, and the OData $metadata document
+    that would enumerate the operable surface returns 401. The 18 entity sets in the anonymously readable
+    service document (openapi/trestle-odata-service-document.json) name the resources but carry no parameters,
+    so any generated inputSchema would be invented.'
+deployment:
+  mode: none
+  verified: derived
+  checked: '2026-08-12'
+  source: catalog MCP census
