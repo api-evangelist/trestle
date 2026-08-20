@@ -25,6 +25,18 @@ description: >-
   signed licence. Certification is not reachability.
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/corelogic.png
 tags:
+- Real-Estate
+- United States
+- MLS
+- RESO
+- Property Listings
+- IDX
+- PropTech
+- Data Distribution
+- OData
+- RETS
+- Listing Syndication
+tags_raw:
 - Real Estate
 - United States
 - MLS
@@ -63,6 +75,12 @@ apis:
   - OData
   - Property Listings
   - MLS
+  - Real-Estate
+  tags_raw:
+  - RESO
+  - OData
+  - Property Listings
+  - MLS
   - Real Estate
   properties:
   - type: Documentation
@@ -97,6 +115,11 @@ apis:
   - Matrix MLS
   - CRM
   - OData
+  - Real-Estate
+  tags_raw:
+  - Matrix MLS
+  - CRM
+  - OData
   - Real Estate
   properties:
   - type: APIReference
@@ -119,6 +142,11 @@ apis:
   - Compliance
   - Reporting
   - MLS
+  - Real-Estate
+  tags_raw:
+  - Compliance
+  - Reporting
+  - MLS
   - Real Estate
   properties:
   - type: APIReference
@@ -135,6 +163,11 @@ apis:
   humanURL: https://trestle-documentation.corelogic.com/rets.html
   baseURL: https://api.cotality.com/trestle/rets
   tags:
+  - RETS
+  - Legacy
+  - MLS
+  - Real-Estate
+  tags_raw:
   - RETS
   - Legacy
   - MLS
