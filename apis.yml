@@ -23,6 +23,17 @@ description: >-
   sponsors it or the technology provider files periodic participant reports. Trestle is
   RESO-certified and publicly documented, and still effectively uncallable without a
   signed licence. Certification is not reachability.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/corelogic.png
 tags:
 - Real-Estate
