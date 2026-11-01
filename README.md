@@ -1,4 +1,4 @@
-# Trestle (trestle)
+# Trestle
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,136 +64,127 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Trestle is the real estate data distribution platform operated by CoreLogic (rebranded Cotality in 2025), sitting between roughly 500 US Multiple Listing Services and the technology providers, brokers and aggregators that consume their listing data. Its home market is the United States. Trestle occupies the licensing-and-transport layer of the residential real estate value chain: it maps each participating MLS into the RESO Data Dictionary and republishes it through a RESO Web API 2.0 / OData 4.0 endpoint and a legacy RETS 1.8 endpoint, plus a bidirectional Direct Web API into the Matrix MLS CRM and a Participant Reporting API used to prove broker relationships back to the MLSs. Its API posture is unusually honest for this sector: the documentation portal is fully public and needs no login, the OAuth2 client-credentials flow and every OData query convention are published openly, and the OData service document answers anonymously with a 200. But nothing behind it is reachable. The `$metadata` document and every entity set return 401 Bearer, and credentials are only issued after a developer registers a Technology Provider or Broker account, requests a connection to a specific multiple listing organization, and completes an e-signed data licence contract that all parties sign — a contract most MLSs will only ratify if a licensed broker or agent sponsors it or the technology provider files periodic participant reports. Trestle is RESO-certified and publicly documented, and still effectively uncallable without a signed licence. Certification is not reachability.
+Trestle is the real estate data distribution platform operated by CoreLogic (rebranded Cotality in 2025), sitting between roughly 500 US Multiple Listing Services and the technology providers, brokers and aggregators that consume their listing data. Its home market is the United States. Trestle occupies the licensing-and-transport layer of the residential real estate value chain: it maps each participating MLS into the RESO Data Dictionary and republishes it through a RESO Web API 2.0 / OData 4.0 endpoint and a legacy RETS 1.8 endpoint, plus a bidirectional Direct Web API into the Matrix MLS CRM and a Participant Reporting API used to prove broker relationships back to the MLSs. Its API posture is unusually honest for this sector: the documentation portal at trestle-documentation.corelogic.com is fully public and needs no login, the OAuth2 client-credentials flow and every OData query convention are published openly, and the OData service document at api.cotality.com/trestle/odata answers anonymously with a 200. But nothing behind it is reachable. The $metadata document and every entity set return 401 Bearer, and credentials are only issued after a developer registers a Technology Provider or Broker account, requests a connection to a specific multiple listing organization, and completes an e-signed data licence contract that all parties sign — a contract most MLSs will only ratify if a licensed broker or agent sponsors it or the technology provider files periodic participant reports. Trestle is RESO-certified and publicly documented, and still effectively uncallable without a signed licence. Certification is not reachability.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/trestle/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/trestle/refs/heads/main/apis.yml)
+**Areas:** Real Estate · United States · MLS · RESO · Property Listings · IDX · PropTech · Data Distribution · OData · RETS · Listing Syndication
 
-## Tags
+## Trestle on APIs.io
 
-- Real Estate
-- United States
-- MLS
-- RESO
-- Property Listings
-- IDX
-- PropTech
-- Data Distribution
-- OData
-- RETS
-- Listing Syndication
+Everything profiled for Trestle is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/trestle/](https://apis.io/providers/trestle/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (4)
 
-- **Created:** 2026-07-26
-- **Modified:** 2026-07-26
+- [Trestle RESO Web API](https://apis.io/apis/trestle/trestle-reso-web-api/) — The primary Trestle interface — a RESO Web API 2.0 / OData 4.0 endpoint that republishes MLS data mapped to the RESO Data Dictionary. The anonymously…
+- [Trestle Direct Web API](https://apis.io/apis/trestle/trestle-direct-web-api/) — A bidirectional OData interface into the Matrix MLS database, separate from the RESO feed. The CRM reference documents Contacts, EmailHistory, Lists,…
+- [Trestle Participant Reporting API](https://apis.io/apis/trestle/trestle-participant-reporting-api/) — A compliance API that lets technology providers report to each MLS which brokers they hold contracts with — the mechanism by which the licence relationship…
+- [Trestle RETS](https://apis.io/apis/trestle/trestle-rets/) — Trestle's legacy Real Estate Transaction Standard interface, documented as compliant with RETS 1.8. RESO no longer updates the RETS specification, but…
 
-## RESO Posture
+### Published properties
 
-- **RESO Web API:** Platinum certification for the Trestle Web API listing transmission service.
-- **RESO Data Dictionary:** v2.0 vendor certification, achieved 2024-10-11.
-- **RESO UPI:** first multiple listing data distributor certified on UPI v2.0.
-- **Reachability:** the OData service document at `https://api.cotality.com/trestle/odata` is anonymously readable (200). The `$metadata` document and every entity set return **401 Bearer**. Certified per the public record, but no endpoint is reachable without an MLS data licence agreement.
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## Access Gate
+#### MCP servers (1)
 
-**Licence agreement.** Register a Technology Provider or Broker account at `https://trestle.corelogic.com`, then request a connection to each individual multiple listing organization. Trestle walks the applicant through an e-signing contract collecting signatures from all parties and authorizing billing of that MLO's licence fee. Most MLOs additionally require a licensed broker or agent to ratify the contract, or periodic participant reports naming which members use the service. Credentials are tied to a specific product/feed type. No sandbox is documented.
+Model Context Protocol servers that expose the API to agents.
 
-## APIs
+- [trestle-mcp.yml](https://apis.io/servers/trestle/trestle-mcp-yml/)
 
-### Trestle RESO Web API
+#### Collections (2)
 
-The primary Trestle interface — a RESO Web API 2.0 / OData 4.0 endpoint that republishes MLS data mapped to the RESO Data Dictionary. The anonymously readable OData service document advertises 18 entity sets: Property, Office, Member, Media, OpenHouse, CustomProperty, PropertyRooms, PropertyUnitTypes, Teams, TeamMembers, Field, Lookup, Model, PropertyGreenVerification, Building, HistoryTransactional, DataSystem and Enumeration. Authentication is OAuth2 `client_credentials` against `/trestle/oidc/connect/token` with `scope=api`, returning an 8-hour Bearer token. Documented quotas are 7,200 queries/hour and 180 queries/minute for the Web API and 18,000/hour and 480/minute for media URLs.
+Postman and Open Collection request collections.
 
-- **Human URL:** [https://trestle-documentation.corelogic.com/webapi.html](https://trestle-documentation.corelogic.com/webapi.html)
-- **Base URL:** `https://api.cotality.com/trestle/odata`
+- [API Collection](https://apis.io/collections/trestle/open-trestle-odata-service-document/)
+- [Trestle WebAPI Demonstration](https://apis.io/collections/trestle/postman-trestle-webapi/)
 
-#### Tags
+#### Security (3)
 
-- RESO
-- OData
-- Property Listings
-- MLS
-- Real Estate
+Authentication, trust centre, and vulnerability disclosure.
 
-#### Properties
+- [Trestle Authentication](https://apis.io/security/trestle/trestle-authentication/)
+- [Trestle Domain Security](https://apis.io/security/trestle/trestle-domain-security/)
+- [Trestle Vulnerability Disclosure](https://apis.io/security/trestle/trestle-vulnerability-disclosure/)
 
-- [Documentation](https://trestle-documentation.corelogic.com/webapi.html)
-- [API Reference](https://trestle-documentation.corelogic.com/webapi-reference.html)
-- [OData Service Document](openapi/trestle-odata-service-document.json)
-- [Documentation — RESO Common Format](https://trestle-documentation.corelogic.com/reso-common-format.html)
-- [Documentation — Web API at Scale](https://trestle-documentation.corelogic.com/webapi-at-scale.html)
-- [Documentation — Web API Libraries](https://trestle-documentation.corelogic.com/webapi-libraries.html)
-- [Data Model](https://api.cotality.com/trestle/Documentation/MetaData/Resource/Property)
-- [Enumerations](https://api.cotality.com/trestle/Documentation/MetaData/Enums)
+#### OAuth scopes (1)
 
-### Trestle Direct Web API
+The permissions the API asks for.
 
-A bidirectional OData interface into the Matrix MLS database, separate from the RESO feed. The CRM reference documents Contacts, EmailHistory, Lists, PortalContents, SavedSearches, UserRegistry and an aggregated DashboardAPI with read and write operations; a companion MLO reference covers multiple-listing-organization integration. Authentication is OpenID Connect, with Clareity Single Sign-On authorization and HTTP Basic named as alternatives, and access is further constrained by the acting user's privileges in Matrix. No explicit base URL is published in the reference, so none is asserted here.
+- [Trestle Scopes](https://apis.io/scopes/trestle/trestle-scopes/)
 
-- **Human URL:** [https://trestle-documentation.corelogic.com/direct-webapi-crm-reference.html](https://trestle-documentation.corelogic.com/direct-webapi-crm-reference.html)
+#### Rate limits (1)
 
-#### Tags
+Published request limits.
 
-- Matrix MLS
-- CRM
-- OData
-- Real Estate
+- [Trestle Rate Limits](https://apis.io/rate-limits/trestle/trestle-rate-limits/)
 
-#### Properties
+## Where to find this API
 
-- [API Reference — CRM](https://trestle-documentation.corelogic.com/direct-webapi-crm-reference.html)
-- [API Reference — MLO](https://trestle-documentation.corelogic.com/direct-webapi-mlo-reference.html)
-
-### Trestle Participant Reporting API
-
-A compliance API that lets technology providers report to each MLS which brokers they hold contracts with — the mechanism by which the licence relationship behind a data feed is evidenced. Documented operations are POST and GET on `/trestle/report/TpParticipantReport`, authenticated with the same OAuth2 `client_credentials` flow as the Web API (`scope=api` for Web API feeds, `scope=rets` for RETS feeds). Not every MLS uses it; some require individual contracts hosted in Trestle instead.
-
-- **Human URL:** [https://trestle-documentation.corelogic.com/participant-reporting-api.html](https://trestle-documentation.corelogic.com/participant-reporting-api.html)
-- **Base URL:** `https://api.cotality.com/trestle/report`
-
-#### Tags
-
-- Compliance
-- Reporting
-- MLS
-- Real Estate
-
-#### Properties
-
-- [API Reference](https://trestle-documentation.corelogic.com/participant-reporting-api.html)
-
-### Trestle RETS
-
-Trestle's legacy Real Estate Transaction Standard interface, documented as compliant with RETS 1.8. RESO no longer updates the RETS specification, but Trestle continues to serve it for customers who cannot move to the Web API. Login is `POST /trestle/rets/login`; the service is session-less and supports either HTTP Basic with a Base64-encoded `client_id:client_secret` or an OAuth2 bearer token obtained with `scope=rets`. Digest authentication is explicitly not supported.
-
-- **Human URL:** [https://trestle-documentation.corelogic.com/rets.html](https://trestle-documentation.corelogic.com/rets.html)
-- **Base URL:** `https://api.cotality.com/trestle/rets`
-
-#### Tags
-
-- RETS
-- Legacy
-- MLS
-- Real Estate
-
-#### Properties
-
-- [Documentation](https://trestle-documentation.corelogic.com/rets.html)
-- [Documentation — RETS Libraries](https://trestle-documentation.corelogic.com/rets-libraries.html)
-- [Documentation — RETS Connector](https://trestle-documentation.corelogic.com/rets-connector.html)
-
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.cotality.com/products/trestle)
 - [Documentation](https://trestle-documentation.corelogic.com/)
-- [FAQ](https://trestle-documentation.corelogic.com/faq.html)
-- [Sign Up](https://trestle.corelogic.com/SubscriptionWizard)
-- [Login](https://trestle.corelogic.com/Login)
+- [Getting started](https://trestle-documentation.corelogic.com/webapi.html)
+- [API reference](https://trestle-documentation.corelogic.com/webapi-reference.html)
+- [Sign up](https://trestle.corelogic.com/SubscriptionWizard)
 - [Support](https://www.cotality.com/support)
-- [Email](mailto:trestlesupport@cotality.com)
-- [Certification — RESO Data Dictionary v2.0](https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification)
-- [Certification — RESO Platinum Web API](https://www.reso.org/blog/corelogic-trestle-achieves-reso-platinum-certification-2/)
+- [Changelog](https://trestle-documentation.corelogic.com/)
+- [Blog](https://www.cotality.com/insights)
+- [Security](https://www.cotality.com/legal/responsible-disclosure-policy)
+- [Compliance](https://www.cotality.com/resources/article/corelogic-achieves-reso-data-dictionary-v2-0-vendor-certification)
+- [Terms of service](https://www.cotality.com/legal/terms-of-use)
+- [Privacy policy](https://www.cotality.com/legal/privacy-policy)
+- [Status](https://status.cotality.com)
 
-## Maintainers
+## API Evangelist rating
 
-- Kin Lane — kin@apievangelist.com
+**Kin Score 45.9** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 62.5 |
+| Contract quality | 11.9 |
+| Contract governance | 18.2 |
+| Operational transparency | 73.7 |
+| Developer ergonomics | 60.1 |
+| Access clarity | 42.1 |
+
+**Agent readiness 18.3** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 45.1** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/trestle/](https://apis.io/providers/trestle/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Trestle: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/trestle/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
